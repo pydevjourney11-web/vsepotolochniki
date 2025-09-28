@@ -172,6 +172,23 @@ def init_db():
     with app.app_context():
         try:
             db.create_all()
+            
+            # Создаем тестового админа если его нет
+            admin_user = User.query.filter_by(email='admin@test.com').first()
+            if not admin_user:
+                from werkzeug.security import generate_password_hash
+                admin_user = User(
+                    email='admin@test.com',
+                    password=generate_password_hash('admin123'),
+                    name='Администратор',
+                    role='admin'
+                )
+                db.session.add(admin_user)
+                db.session.commit()
+                print("Admin user created: admin@test.com / admin123")
+            else:
+                print("Admin user already exists")
+                
         except Exception as e:
             pass  # Игнорируем ошибки при инициализации
 

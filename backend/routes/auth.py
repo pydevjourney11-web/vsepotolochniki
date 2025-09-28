@@ -92,6 +92,26 @@ def login():
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
 
+@auth_bp.route('/check-admin', methods=['GET'])
+def check_admin():
+    """Проверка существования админа"""
+    admin_user = User.query.filter_by(email='admin@test.com').first()
+    if admin_user:
+        return jsonify({
+            'exists': True,
+            'user': {
+                'id': admin_user.id,
+                'email': admin_user.email,
+                'name': admin_user.name,
+                'role': admin_user.role
+            }
+        })
+    else:
+        return jsonify({
+            'exists': False,
+            'message': 'Admin user does not exist'
+        })
+
 @auth_bp.route('/create-admin', methods=['POST'])
 def create_admin():
     """Создание тестового админа"""
