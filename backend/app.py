@@ -19,13 +19,24 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:/
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'jwt-secret-string-change-in-production'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
-app.config['UPLOAD_FOLDER'] = os.path.join(BASE_DIR, 'static', 'uploads')
+# Определяем папку для загрузок
+if os.environ.get('RENDER'):
+    # На Render используем временную папку
+    UPLOAD_FOLDER = '/tmp/uploads'
+else:
+    # Локально используем папку в проекте
+    UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 # Создаем папку для загрузок
 try:
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     print(f"✅ Папка загрузок создана: {app.config['UPLOAD_FOLDER']}")
+    print(f"✅ Переменная RENDER: {os.environ.get('RENDER')}")
+    print(f"✅ Текущая рабочая директория: {os.getcwd()}")
+    print(f"✅ BASE_DIR: {BASE_DIR}")
 except Exception as e:
     print(f"⚠️ Не удалось создать папку загрузок: {e}")
 
