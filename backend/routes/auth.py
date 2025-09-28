@@ -92,68 +92,6 @@ def login():
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
 
-@auth_bp.route('/check-admin', methods=['GET'])
-def check_admin():
-    """Проверка существования админа"""
-    admin_user = User.query.filter_by(email='admin@test.com').first()
-    if admin_user:
-        return jsonify({
-            'exists': True,
-            'user': {
-                'id': admin_user.id,
-                'email': admin_user.email,
-                'name': admin_user.name,
-                'role': admin_user.role
-            }
-        })
-    else:
-        return jsonify({
-            'exists': False,
-            'message': 'Admin user does not exist'
-        })
-
-@auth_bp.route('/create-admin', methods=['POST'])
-def create_admin():
-    """Создание тестового админа"""
-    try:
-        # Проверяем, существует ли уже админ
-        admin_user = User.query.filter_by(email='admin@test.com').first()
-        if admin_user:
-            return jsonify({
-                'message': 'Admin user already exists',
-                'user': {
-                    'id': admin_user.id,
-                    'email': admin_user.email,
-                    'name': admin_user.name,
-                    'role': admin_user.role
-                }
-            })
-        
-        # Создаем админа
-        admin_user = User(
-            email='admin@test.com',
-            password=generate_password_hash('admin123'),
-            name='Администратор',
-            role='admin'
-        )
-        
-        db.session.add(admin_user)
-        db.session.commit()
-        
-        return jsonify({
-            'message': 'Admin user created successfully',
-            'user': {
-                'id': admin_user.id,
-                'email': admin_user.email,
-                'name': admin_user.name,
-                'role': admin_user.role
-            }
-        })
-        
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': f'Failed to create admin: {str(e)}'}), 500
-
 @auth_bp.route('/profile', methods=['GET'])
 @jwt_required()
 def get_profile():
@@ -199,5 +137,39 @@ def update_profile():
             'name': user.name,
             'role': user.role,
             'avatar': user.avatar
+        }
+    })
+
+@auth_bp.route('/make-admin', methods=['POST'])
+@jwt_required()
+def make_admin():
+    """Маршрут для назначения роли админа (только для существующих админов)"""
+    # Проверяем, что текущий пользователь - админ
+    current_user_id = int(get_jwt_identity())
+    current_user = User.query.get(current_user_id)
+    
+    if not current_user or current_user.role != 'admin':
+        return jsonify({'error': 'Недостаточно прав для назначения админа'}), 403
+    
+    data = request.get_json()
+    email = data.get('email')
+    
+    if not email:
+        return jsonify({'error': 'Email is required'}), 400
+    
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    
+    user.role = 'admin'
+    db.session.commit()
+    
+    return jsonify({
+        'message': f'User {email} is now admin',
+        'user': {
+            'id': user.id,
+            'email': user.email,
+            'name': user.name,
+            'role': user.role
         }
     })

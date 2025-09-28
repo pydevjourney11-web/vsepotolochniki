@@ -122,44 +122,6 @@ def init_database():
             'error': f'Database initialization failed: {str(e)}'
         }), 500
 
-@app.route('/api/create-admin-now', methods=['POST'])
-def create_admin_now():
-    """Простое создание админа без проверок"""
-    try:
-        from backend.models import User
-        from werkzeug.security import generate_password_hash
-        
-        # Удаляем существующего админа если есть
-        existing_admin = User.query.filter_by(email='admin@test.com').first()
-        if existing_admin:
-            db.session.delete(existing_admin)
-            db.session.commit()
-        
-        # Создаем нового админа
-        admin_user = User(
-            email='admin@test.com',
-            password=generate_password_hash('admin123'),
-            name='Администратор',
-            role='admin'
-        )
-        
-        db.session.add(admin_user)
-        db.session.commit()
-        
-        return jsonify({
-            'success': True,
-            'message': 'Admin created successfully!',
-            'email': 'admin@test.com',
-            'password': 'admin123'
-        })
-        
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
-
 @app.route('/api/health')
 def health_check():
     try:
@@ -235,7 +197,24 @@ def init_db():
     with app.app_context():
         try:
             db.create_all()
+            
+            # Создаем администратора если его нет
+            from backend.models import User
+            admin_user = User.query.filter_by(email='admin@test.com').first()
+            if not admin_user:
+                from werkzeug.security import generate_password_hash
+                admin_user = User(
+                    email='admin@test.com',
+                    password=generate_password_hash('admin123'),
+                    name='Администратор',
+                    role='admin'
+                )
+                db.session.add(admin_user)
+                db.session.commit()
+                print("✅ Администратор создан: admin@test.com / admin123")
+                
         except Exception as e:
+            print(f"❌ Ошибка инициализации: {e}")
             pass  # Игнорируем ошибки при инициализации
 
 # Инициализируем базу данных при запуске
