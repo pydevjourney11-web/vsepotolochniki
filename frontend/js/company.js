@@ -226,18 +226,6 @@ function setupReviewForm() {
                 reviewData.photos = []; // Пока без фотографий
             }
             
-            // Добавляем имя только для неавторизованных пользователей (капча отключена)
-            if (!auth.isAuthenticated()) {
-                const anonymousName = document.getElementById('anonymousName')?.value.trim();
-                if (!anonymousName) {
-                    alert('Пожалуйста, введите ваше имя');
-                    return;
-                }
-                
-                reviewData.anonymous_name = anonymousName;
-                console.log('🔒 Добавлены данные для анонимного пользователя:', {anonymous_name: anonymousName});
-            }
-            
             console.log('📤 Отправляем данные:', reviewData);
             await api.createReview(reviewData);
             
@@ -258,6 +246,12 @@ function setupReviewForm() {
 
 // Открытие модального окна отзыва
 function openReviewModal() {
+    // Проверяем авторизацию
+    if (!auth.isAuthenticated()) {
+        alert('Для оставления отзыва необходимо войти в систему');
+        return;
+    }
+    
     const modal = new bootstrap.Modal(document.getElementById('reviewModal'));
     modal.show();
 }

@@ -413,6 +413,12 @@ function showNotification(message, type = 'info') {
 document.getElementById('reviewForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
+    // Проверяем авторизацию
+    if (!auth.isAuthenticated()) {
+        alert('Для оставления отзыва необходимо войти в систему');
+        return;
+    }
+    
     const companyId = document.getElementById('reviewCompanyId').value;
     const rating = document.querySelector('.rating-input .active')?.getAttribute('data-rating') || 0;
     const text = document.getElementById('reviewText').value;
@@ -433,17 +439,6 @@ document.getElementById('reviewForm').addEventListener('submit', async function(
         // TODO: Загрузка фотографий
         if (photos.length > 0) {
             reviewData.photos = []; // Пока без фотографий
-        }
-        
-        // Добавляем имя только для неавторизованных пользователей (капча отключена)
-        if (!auth.isAuthenticated()) {
-            const anonymousName = document.getElementById('anonymousName')?.value.trim();
-            if (!anonymousName) {
-                alert('Пожалуйста, введите ваше имя');
-                return;
-            }
-            
-            reviewData.anonymous_name = anonymousName;
         }
         
         await api.createReview(reviewData);

@@ -7,6 +7,7 @@ import requests
 reviews_bp = Blueprint('reviews', __name__)
 
 @reviews_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_review():
     data = request.get_json()
     
@@ -23,38 +24,23 @@ def create_review():
     # Проверяем, что компания существует
     company = Company.query.get_or_404(company_id)
     
-    # Проверяем авторизацию
-    user_id = None
-    anonymous_name = None
+    # Получаем ID авторизованного пользователя
+    user_id = get_jwt_identity()
+    user_id = int(user_id)
+    print(f"✅ Пользователь авторизован для отзыва: {user_id}")
     
-    try:
-        verify_jwt_in_request()
-        user_id = get_jwt_identity()
-        user_id = int(user_id)
-        print(f"✅ Пользователь авторизован для отзыва: {user_id}")
-        
-        # Проверяем, что пользователь не оставлял отзыв на эту компанию
-        existing_review = Review.query.filter_by(company_id=company_id, user_id=user_id).first()
-        if existing_review:
-            return jsonify({'error': 'You have already reviewed this company'}), 400
-            
-    except Exception as e:
-        print(f"❌ Пользователь не авторизован для отзыва: {e}")
-        # Пользователь не авторизован - анонимный отзыв
-        # Капча отключена для тестирования
-        print("🔓 Капча отключена - пропускаем проверку")
-        
-        # Запрашиваем имя для анонимного отзыва
-        anonymous_name = data.get('anonymous_name', 'Анонимный пользователь')
+    # Проверяем, что пользователь не оставлял отзыв на эту компанию
+    existing_review = Review.query.filter_by(company_id=company_id, user_id=user_id).first()
+    if existing_review:
+        return jsonify({'error': 'You have already reviewed this company'}), 400
     
     # Создаем отзыв
     try:
-        print(f"🔨 Создаем отзыв: company_id={company_id}, user_id={user_id}, anonymous_name={anonymous_name}, rating={rating}")
+        print(f"🔨 Создаем отзыв: company_id={company_id}, user_id={user_id}, rating={rating}")
         
         review = Review(
             company_id=company_id,
             user_id=user_id,
-            anonymous_name=anonymous_name,
             rating=rating,
             text=data.get('text'),
             photos=json.dumps(data.get('photos', [])),
