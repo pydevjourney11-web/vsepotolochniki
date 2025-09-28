@@ -8,11 +8,16 @@ moderation_bp = Blueprint('moderation', __name__, url_prefix='/api/moderation')
 
 # Проверка прав администратора
 def require_admin():
-    user_id = int(get_jwt_identity())
-    user = User.query.get(user_id)
-    if not user or user.role != 'admin':
-        return jsonify({'error': 'Недостаточно прав'}), 403
-    return None
+    try:
+        user_id = int(get_jwt_identity())
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'error': 'Пользователь не найден'}), 403
+        if user.role != 'admin':
+            return jsonify({'error': 'Недостаточно прав. Роль: ' + str(user.role)}), 403
+        return None
+    except Exception as e:
+        return jsonify({'error': f'Ошибка проверки прав: {str(e)}'}), 403
 
 # Получение статей на модерации
 @moderation_bp.route('/articles', methods=['GET'])
@@ -26,17 +31,20 @@ def get_pending_articles():
     per_page = request.args.get('per_page', 20, type=int)
     status = request.args.get('status', 'pending')
     
-    articles = Article.query.filter_by(status=status).order_by(Article.created_at.desc()).paginate(
-        page=page, per_page=per_page, error_out=False
-    )
-    
-    return jsonify({
-        'articles': [article.to_dict() for article in articles.items],
-        'total': articles.total,
-        'pages': articles.pages,
-        'current_page': articles.page,
-        'per_page': articles.per_page
-    })
+    try:
+        articles = Article.query.filter_by(status=status).order_by(Article.created_at.desc()).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
+        
+        return jsonify({
+            'articles': [article.to_dict() for article in articles.items],
+            'total': articles.total,
+            'pages': articles.pages,
+            'current_page': articles.page,
+            'per_page': articles.per_page
+        })
+    except Exception as e:
+        return jsonify({'error': f'Ошибка загрузки статей: {str(e)}'}), 500
 
 # Получение комментариев на модерации
 @moderation_bp.route('/comments', methods=['GET'])

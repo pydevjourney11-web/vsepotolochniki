@@ -38,6 +38,30 @@ class Company(db.Model):
     
     # Связи
     reviews = db.relationship('Review', backref='company', lazy=True, cascade='all, delete-orphan')
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'category': self.category,
+            'city': self.city,
+            'status': self.status,
+            'address': self.address,
+            'phone': self.phone,
+            'website': self.website,
+            'description': self.description,
+            'logo': self.logo,
+            'rating': self.rating,
+            'review_count': self.review_count,
+            'owner_id': self.owner_id,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat(),
+            'owner': {
+                'id': self.owner.id,
+                'name': self.owner.name,
+                'email': self.owner.email
+            } if self.owner else None
+        }
 
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -79,6 +103,29 @@ class Article(db.Model):
     
     # Связи
     comments = db.relationship('Comment', backref='article', lazy=True, cascade='all, delete-orphan')
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'content': self.content,
+            'excerpt': self.excerpt,
+            'cover_image': self.cover_image,
+            'tags': json.loads(self.tags) if self.tags else [],
+            'status': self.status,
+            'views': self.views,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat(),
+            'author': {
+                'id': self.author.id if self.author else None,
+                'name': self.author.name if self.author else self.anonymous_author,
+                'avatar': self.author.avatar if self.author else None
+            } if self.author else {
+                'id': None,
+                'name': self.anonymous_author or 'Анонимный автор',
+                'avatar': None
+            }
+        }
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
