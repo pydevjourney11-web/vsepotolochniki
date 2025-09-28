@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:/
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'jwt-secret-string-change-in-production'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = os.path.join(BASE_DIR, 'static', 'uploads')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 # Создаем папку для загрузок
@@ -293,7 +293,41 @@ def allowed_file(filename):
 
 @app.route('/static/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    try:
+        print(f"📁 Запрос файла: {filename}")
+        print(f"📁 Путь к файлу: {os.path.join(app.config['UPLOAD_FOLDER'], filename)}")
+        print(f"📁 Файл существует: {os.path.exists(os.path.join(app.config['UPLOAD_FOLDER'], filename))}")
+        
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    except Exception as e:
+        print(f"❌ Ошибка при обслуживании файла {filename}: {e}")
+        return jsonify({'error': 'File not found'}), 404
+
+@app.route('/api/debug-uploads')
+def debug_uploads():
+    """Отладочный endpoint для проверки загруженных файлов"""
+    try:
+        upload_folder = app.config['UPLOAD_FOLDER']
+        files = []
+        
+        if os.path.exists(upload_folder):
+            for filename in os.listdir(upload_folder):
+                file_path = os.path.join(upload_folder, filename)
+                if os.path.isfile(file_path):
+                    files.append({
+                        'name': filename,
+                        'size': os.path.getsize(file_path),
+                        'path': file_path
+                    })
+        
+        return jsonify({
+            'upload_folder': upload_folder,
+            'folder_exists': os.path.exists(upload_folder),
+            'files': files,
+            'file_count': len(files)
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # API для загрузки фотографий
 @app.route('/api/upload-photos', methods=['POST'])
@@ -330,7 +364,17 @@ def upload_photos():
                 
                 # Сохраняем файл
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+                print(f"📁 Сохраняем файл: {file_path}")
+                print(f"📁 Папка загрузок: {app.config['UPLOAD_FOLDER']}")
+                print(f"📁 Файл существует: {os.path.exists(app.config['UPLOAD_FOLDER'])}")
+                
                 file.save(file_path)
+                
+                # Проверяем, что файл сохранился
+                if os.path.exists(file_path):
+                    print(f"✅ Файл успешно сохранен: {file_path}")
+                else:
+                    print(f"❌ Файл не сохранился: {file_path}")
                 
                 uploaded_files.append(unique_filename)
         
