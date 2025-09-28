@@ -307,19 +307,25 @@ class API {
             formData.append('photos', files[i]);
         }
         
-        const response = await fetch(`${this.baseURL}/upload-photos`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${this.token}`
-            },
-            body: formData
-        });
+        try {
+            const response = await fetch(`${this.baseURL}/upload-photos`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${this.token}`
+                },
+                body: formData
+            });
 
-        if (!response.ok) {
-            throw new Error('Ошибка загрузки фотографий');
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Ошибка загрузки фотографий');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Ошибка загрузки фотографий:', error);
+            throw error;
         }
-
-        return response.json();
     }
 }
 

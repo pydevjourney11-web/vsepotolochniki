@@ -317,7 +317,8 @@ def upload_photos():
                     return jsonify({'error': 'Only image files are allowed'}), 400
                 
                 # Проверяем размер файла (5MB)
-                if len(file.read()) > 5 * 1024 * 1024:
+                file_content = file.read()
+                if len(file_content) > 5 * 1024 * 1024:
                     return jsonify({'error': 'File size too large (max 5MB)'}), 400
                 
                 file.seek(0)  # Возвращаем указатель в начало
