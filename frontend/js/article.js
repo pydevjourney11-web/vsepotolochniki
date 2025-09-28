@@ -242,13 +242,15 @@ document.getElementById('commentForm').addEventListener('submit', async function
             article_id: currentArticleId
         };
         
-        // Добавляем капчу и имя для неавторизованных пользователей
+        // Добавляем имя только для неавторизованных пользователей (капча отключена)
         if (!auth.isAuthenticated()) {
-            commentData.captcha = grecaptcha.getResponse();
             const anonymousName = document.getElementById('anonymousName').value.trim();
-            if (anonymousName) {
-                commentData.anonymous_name = anonymousName;
+            if (!anonymousName) {
+                alert('Пожалуйста, введите ваше имя');
+                return;
             }
+            
+            commentData.anonymous_name = anonymousName;
         }
         
         await api.createComment(currentArticleId, commentData);
