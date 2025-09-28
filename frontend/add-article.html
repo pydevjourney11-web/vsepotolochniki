@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ВП | Все потолочные - Написать статью</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-star"></i> ВП | Все потолочные
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="catalog.html">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="forum.html">Форум</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <span id="userName"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">Профиль</a></li>
+                            <li><a class="dropdown-item" href="add-company.html">Добавить компанию</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Выход</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-newspaper"></i> Написать статью</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="addArticleForm">
+                            <div class="mb-3" id="anonymousAuthorContainer" style="display: none;">
+                                <label for="anonymousAuthor" class="form-label">Ваше имя *</label>
+                                <input type="text" class="form-control" id="anonymousAuthor" 
+                                       placeholder="Введите ваше имя">
+                            </div>
+                            <div class="mb-3">
+                                <label for="articleTitle" class="form-label">Заголовок статьи *</label>
+                                <input type="text" class="form-control" id="articleTitle" required 
+                                       placeholder="Интересный заголовок для вашей статьи">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="articleCover" class="form-label">Обложка (URL)</label>
+                                <input type="url" class="form-control" id="articleCover" 
+                                       placeholder="https://example.com/image.jpg">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="articleTags" class="form-label">Теги</label>
+                                <input type="text" class="form-control" id="articleTags" 
+                                       placeholder="ремонт, советы, дизайн (через запятую)">
+                                <div class="form-text">Теги помогают читателям найти вашу статью</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="articleContent" class="form-label">Содержание статьи *</label>
+                                <textarea class="form-control" id="articleContent" rows="15" required 
+                                          placeholder="Напишите вашу статью здесь..."></textarea>
+                            </div>
+                            
+                            <div class="mb-3" id="captchaContainer" style="display: none;">
+                                <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Опубликовать статью
+                                </button>
+                                <a href="forum.html" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times"></i> Отмена
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Настройка для гостей и авторизованных пользователей
+        document.addEventListener('DOMContentLoaded', function() {
+            // Обновляем UI навигации
+            auth.updateUI();
+            
+            // Показываем капчу и поле имени только для неавторизованных пользователей
+            const captchaContainer = document.getElementById('captchaContainer');
+            const anonymousAuthorContainer = document.getElementById('anonymousAuthorContainer');
+            
+            if (auth.isAuthenticated()) {
+                captchaContainer.style.display = 'none';
+                anonymousAuthorContainer.style.display = 'none';
+            } else {
+                captchaContainer.style.display = 'block';
+                anonymousAuthorContainer.style.display = 'block';
+                // Перезагружаем капчу
+                if (typeof grecaptcha !== 'undefined') {
+                    grecaptcha.reset();
+                }
+            }
+        });
+
+        // Обработка формы
+        document.getElementById('addArticleForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('articleTitle').value;
+            const content = document.getElementById('articleContent').value;
+            const coverImage = document.getElementById('articleCover').value;
+            const tagsText = document.getElementById('articleTags').value;
+            
+            if (!title || !content) {
+                alert('Пожалуйста, заполните заголовок и содержание статьи');
+                return;
+            }
+            
+            // Проверяем капчу для неавторизованных пользователей
+            if (!auth.isAuthenticated()) {
+                const captchaResponse = grecaptcha.getResponse();
+                if (!captchaResponse) {
+                    alert('Пожалуйста, пройдите проверку капчи');
+                    return;
+                }
+                
+                const anonymousAuthor = document.getElementById('anonymousAuthor').value.trim();
+                if (!anonymousAuthor) {
+                    alert('Пожалуйста, введите ваше имя');
+                    return;
+                }
+            }
+            
+            // Обрабатываем теги
+            const tags = tagsText.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+            
+            const data = {
+                title: title,
+                content: content,
+                cover_image: coverImage || null,
+                tags: tags
+            };
+            
+            // Добавляем капчу и имя для неавторизованных пользователей
+            if (!auth.isAuthenticated()) {
+                data.captcha = grecaptcha.getResponse();
+                data.anonymous_author = document.getElementById('anonymousAuthor').value.trim();
+            }
+            
+            try {
+                const response = await api.createArticle(data);
+                alert('Статья успешно опубликована!');
+                window.location.href = 'forum.html';
+            } catch (error) {
+                alert('Ошибка: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

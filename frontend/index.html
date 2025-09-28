@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ВП | Все потолочные - Ассоциация монтажников натяжных потолков</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-star"></i> ВП | Все потолочные
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="catalog.html">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="forum.html">Форум</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="search.html">Поиск</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="authButtons">
+                        <a class="nav-link" href="login.html">Вход</a>
+                        <a class="nav-link" href="register.html">Регистрация</a>
+                    </li>
+                    <li class="nav-item dropdown" id="userMenu" style="display: none;">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <span id="userName"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">Профиль</a></li>
+                            <li><a class="dropdown-item" href="add-company.html">Добавить компанию</a></li>
+                            <li id="moderationLink" style="display: none;"><a class="dropdown-item" href="moderation.html">Модерация</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Выход</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Главный баннер -->
+    <section class="hero-section text-white py-5">
+        <div class="container position-relative">
+            <!-- Звезды -->
+            <div class="hero-stars">
+                <i class="fas fa-star hero-star"></i>
+                <i class="fas fa-star hero-star"></i>
+                <i class="fas fa-star hero-star"></i>
+                <i class="fas fa-star hero-star"></i>
+                <i class="fas fa-star hero-star"></i>
+            </div>
+            
+            <!-- Рука -->
+            <div class="hero-hand">
+                <i class="fas fa-hand-point-right"></i>
+            </div>
+            
+            <!-- Заголовок -->
+            <div class="row align-items-center" style="min-height: 500px;">
+                <div class="col-lg-8">
+                    <div class="mb-4">
+                        <h1 class="display-4 fw-bold mb-3">ВП | Все потолочные</h1>
+                        <h2 class="h3 mb-4">Ассоциация монтажников натяжных потолков</h2>
+                        <p class="lead mb-4">
+                            Платформа для честного взаимодействия между заказчиками и исполнителями. 
+                            Мы обеспечиваем прозрачность рынка, защиту потребителей и профессиональное сообщество.
+                        </p>
+                        <div class="d-flex gap-3">
+                            <a href="catalog.html" class="btn btn-light btn-lg px-4">
+                                <i class="fas fa-search me-2"></i>Найти исполнителя
+                            </a>
+                            <a href="forum.html" class="btn btn-outline-light btn-lg px-4">
+                                <i class="fas fa-comments me-2"></i>Форум
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Блоки с информацией -->
+            <div class="row mt-5">
+                <div class="col-lg-4">
+                    <div class="red-card p-4 mb-4">
+                        <h4 class="mb-3">ЧЕСТНАЯ ЦЕНА</h4>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                <i class="fas fa-check text-danger"></i>
+                            </div>
+                            <span>Организация переделок при некачественном монтаже</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                <i class="fas fa-check text-danger"></i>
+                            </div>
+                            <span>Честные цены и стандарты</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                <i class="fas fa-check text-danger"></i>
+                            </div>
+                            <span>Проверенные специалисты</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-8">
+                    <div class="red-card-dark p-4">
+                        <h4 class="mb-4">Прозрачность рынка, защита потребителей</h4>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-4">
+                                <div class="text-center">
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                                        <i class="fas fa-star text-primary fa-2x"></i>
+                                    </div>
+                                    <h5 class="mb-2">01. Честные отзывы о подрядчиках</h5>
+                                    <p class="small">Реальные отзывы клиентов о качестве работы</p>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 mb-4">
+                                <div class="text-center">
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                                        <i class="fas fa-exclamation-triangle text-warning fa-2x"></i>
+                                    </div>
+                                    <h5 class="mb-2">02. Жалобы и исправление ошибок</h5>
+                                    <p class="small">Быстрое решение проблем и компенсация ущерба</p>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 mb-4">
+                                <div class="text-center">
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                                        <i class="fas fa-users text-info fa-2x"></i>
+                                    </div>
+                                    <h5 class="mb-2">03. Присоединиться к ассоциации</h5>
+                                    <p class="small">Станьте частью профессионального сообщества</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <a href="forum.html" class="btn btn-outline-light btn-lg px-5">
+                                <i class="fas fa-comments me-2"></i>
+                                ОТКРЫТЬ ФОРУМ (ущерб и решение)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Поиск -->
+    <section class="search-section py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card shadow">
+                        <div class="card-body p-4">
+                            <h3 class="text-center mb-4">Поиск исполнителей</h3>
+                            <form id="searchForm">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Что ищете?</label>
+                                        <input type="text" class="form-control" id="searchQuery" placeholder="Например: монтаж потолков, ремонт">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Категория</label>
+                                        <select class="form-select" id="categorySelect">
+                                            <option value="">Все категории</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Город</label>
+                                        <select class="form-select" id="citySelect">
+                                            <option value="">Все города</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">&nbsp;</label>
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="fas fa-search"></i> Найти
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Дополнительные фильтры -->
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Рейтинг от</label>
+                                        <select class="form-select" id="ratingSelect">
+                                            <option value="">Любой</option>
+                                            <option value="4">4+ звезд</option>
+                                            <option value="3">3+ звезд</option>
+                                            <option value="2">2+ звезд</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Цена</label>
+                                        <select class="form-select" id="priceSelect">
+                                            <option value="">Любая</option>
+                                            <option value="budget">Бюджетная</option>
+                                            <option value="medium">Средняя</option>
+                                            <option value="premium">Премиум</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Опыт работы</label>
+                                        <select class="form-select" id="experienceSelect">
+                                            <option value="">Любой</option>
+                                            <option value="5+">5+ лет</option>
+                                            <option value="3+">3+ лет</option>
+                                            <option value="1+">1+ год</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">&nbsp;</label>
+                                        <button type="button" class="btn btn-outline-secondary w-100" onclick="clearSearchFilters()">
+                                            <i class="fas fa-times"></i> Сбросить
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Популярные категории -->
+    <section class="categories-section py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+        <div class="container">
+            <h2 class="text-center mb-5 text-danger">Популярные категории</h2>
+            <div class="row" id="categoriesGrid">
+                <!-- Категории загружаются через JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Примеры проблем -->
+    <section class="problems-section py-5" style="background: var(--red-gradient);">
+        <div class="container">
+            <h2 class="text-center mb-5 text-white">С какими проблемами мы помогаем?</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 text-center border-light bg-white bg-opacity-10">
+                        <div class="card-body text-white">
+                            <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                            <h5 class="card-title">Некачественный монтаж</h5>
+                            <p class="card-text">Помогаем решить проблемы с браком, переделками и компенсацией ущерба от недобросовестных исполнителей</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 text-center border-light bg-white bg-opacity-10">
+                        <div class="card-body text-white">
+                            <i class="fas fa-ruble-sign fa-3x mb-3"></i>
+                            <h5 class="card-title">Завышенные цены</h5>
+                            <p class="card-text">Борьба с завышенными ценами и скрытыми доплатами. Прозрачное ценообразование и честные сметы</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 text-center border-light bg-white bg-opacity-10">
+                        <div class="card-body text-white">
+                            <i class="fas fa-users fa-3x mb-3"></i>
+                            <h5 class="card-title">Поиск исполнителей</h5>
+                            <p class="card-text">Находим проверенных специалистов с реальными отзывами и рейтингами для качественного выполнения работ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 text-center border-light bg-white bg-opacity-10">
+                        <div class="card-body text-white">
+                            <i class="fas fa-shield-alt fa-3x mb-3"></i>
+                            <h5 class="card-title">Защита прав</h5>
+                            <p class="card-text">Правовая поддержка в спорах с исполнителями, помощь в составлении претензий и обращений</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 text-center border-light bg-white bg-opacity-10">
+                        <div class="card-body text-white">
+                            <i class="fas fa-handshake fa-3x mb-3"></i>
+                            <h5 class="card-title">Медиация споров</h5>
+                            <p class="card-text">Помогаем найти компромисс между заказчиком и исполнителем, избежать судебных разбирательств</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Последние статьи и обсуждения -->
+    <section class="articles-section py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Последние статьи и обсуждения</h2>
+                <a href="forum.html" class="btn btn-outline-primary">Все статьи</a>
+            </div>
+            
+            <!-- Вкладки -->
+            <ul class="nav nav-tabs mb-4" id="articlesTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="articles-tab" data-bs-toggle="tab" data-bs-target="#articles" type="button" role="tab">
+                        <i class="fas fa-newspaper me-2"></i>Статьи
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="discussions-tab" data-bs-toggle="tab" data-bs-target="#discussions" type="button" role="tab">
+                        <i class="fas fa-comments me-2"></i>Обсуждения
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
+                        <i class="fas fa-star me-2"></i>Отзывы
+                    </button>
+                </li>
+            </ul>
+            
+            <!-- Содержимое вкладок -->
+            <div class="tab-content" id="articlesTabContent">
+                <div class="tab-pane fade show active" id="articles" role="tabpanel">
+                    <div class="row" id="latestArticles">
+                        <!-- Статьи загружаются через JS -->
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="discussions" role="tabpanel">
+                    <div class="row" id="latestDiscussions">
+                        <!-- Обсуждения загружаются через JS -->
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="reviews" role="tabpanel">
+                    <div class="row" id="latestReviews">
+                        <!-- Отзывы загружаются через JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="py-4" style="background: var(--red-gradient);">
+        <div class="container">
+            <div class="row text-white">
+                <div class="col-md-6">
+                    <h5>ВП | Все потолочные</h5>
+                    <p>Ассоциация монтажников натяжных потолков</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2024 Ассоциация монтажников натяжных потолков. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

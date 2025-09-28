@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск - Исполнители</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-search me-2"></i>Исполнители
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="catalog.html">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="forum.html">Форум</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="search.html">Поиск</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="authNav">
+                        <a class="nav-link" href="login.html">Войти</a>
+                    </li>
+                    <li class="nav-item" id="profileNav" style="display: none;">
+                        <a class="nav-link" href="profile.html">Профиль</a>
+                    </li>
+                    <li class="nav-item" id="logoutNav" style="display: none;">
+                        <a class="nav-link" href="#" onclick="auth.logout()">Выйти</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <div class="container mt-4">
+        <!-- Поисковая строка -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="searchForm">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-lg" id="searchInput" 
+                                               placeholder="Поиск по компаниям, статьям, отзывам..." autocomplete="off">
+                                        <button class="btn btn-primary btn-lg" type="submit">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                    <!-- Предложения -->
+                                    <div id="suggestions" class="list-group position-absolute w-100" style="z-index: 1000; display: none;">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select form-select-lg" id="typeFilter">
+                                        <option value="all">Все результаты</option>
+                                        <option value="companies">Компании</option>
+                                        <option value="articles">Статьи</option>
+                                        <option value="reviews">Отзывы</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Результаты поиска -->
+        <div id="searchResults">
+            <div class="text-center text-muted">
+                <i class="fas fa-search fa-3x mb-3"></i>
+                <h4>Введите запрос для поиска</h4>
+                <p>Найдите компании, статьи или отзывы по ключевым словам</p>
+            </div>
+        </div>
+
+        <!-- Пагинация -->
+        <nav id="pagination" style="display: none;">
+            <ul class="pagination justify-content-center">
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Подключение скриптов -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/search.js"></script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ВП | Все потолочные - Личный кабинет</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-star"></i> ВП | Все потолочные
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="catalog.html">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="forum.html">Форум</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <span id="userName"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item active" href="profile.html">Профиль</a></li>
+                            <li><a class="dropdown-item" href="add-company.html">Добавить компанию</a></li>
+                            <li id="moderationLink" style="display: none;"><a class="dropdown-item" href="moderation.html">Модерация</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Выход</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <img src="https://via.placeholder.com/100" class="rounded-circle mb-3" id="userAvatar" alt="Аватар">
+                        <h5 id="userProfileName">Имя пользователя</h5>
+                        <p class="text-muted" id="userEmail">email@example.com</p>
+                        <button class="btn btn-outline-primary btn-sm" onclick="editProfile()">
+                            <i class="fas fa-edit"></i> Редактировать
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6>Навигация</h6>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="#" class="list-group-item list-group-item-action active" data-tab="companies">
+                            <i class="fas fa-building"></i> Мои компании
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" data-tab="reviews">
+                            <i class="fas fa-star"></i> Мои отзывы
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" data-tab="articles">
+                            <i class="fas fa-newspaper"></i> Мои статьи
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-9">
+                <!-- Мои компании -->
+                <div id="companiesTab" class="tab-content">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4>Мои компании</h4>
+                        <a href="add-company.html" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Добавить компанию
+                        </a>
+                    </div>
+                    <div id="userCompanies">
+                        <!-- Компании загружаются через JS -->
+                    </div>
+                </div>
+
+                <!-- Мои отзывы -->
+                <div id="reviewsTab" class="tab-content" style="display: none;">
+                    <h4 class="mb-4">Мои отзывы</h4>
+                    <div id="userReviews">
+                        <!-- Отзывы загружаются через JS -->
+                    </div>
+                </div>
+
+                <!-- Мои статьи -->
+                <div id="articlesTab" class="tab-content" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4>Мои статьи</h4>
+                        <a href="add-article.html" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Написать статью
+                        </a>
+                    </div>
+                    <div id="userArticles">
+                        <!-- Статьи загружаются через JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно редактирования профиля -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редактировать профиль</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label for="editName" class="form-label">Имя</label>
+                            <input type="text" class="form-control" id="editName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAvatar" class="form-label">Аватар (URL)</label>
+                            <input type="url" class="form-control" id="editAvatar" placeholder="https://example.com/avatar.jpg">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно редактирования компании -->
+    <div class="modal fade" id="editCompanyModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редактировать компанию</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCompanyForm">
+                        <input type="hidden" id="editCompanyId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editCompanyName" class="form-label">Название</label>
+                                    <input type="text" class="form-control" id="editCompanyName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCompanyCategory" class="form-label">Категория</label>
+                                    <input type="text" class="form-control" id="editCompanyCategory" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCompanyCity" class="form-label">Город</label>
+                                    <input type="text" class="form-control" id="editCompanyCity" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editCompanyPhone" class="form-label">Телефон</label>
+                                    <input type="tel" class="form-control" id="editCompanyPhone">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCompanyWebsite" class="form-label">Сайт</label>
+                                    <input type="url" class="form-control" id="editCompanyWebsite">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCompanyLogo" class="form-label">Логотип (URL)</label>
+                                    <input type="url" class="form-control" id="editCompanyLogo">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCompanyAddress" class="form-label">Адрес</label>
+                            <input type="text" class="form-control" id="editCompanyAddress">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCompanyDescription" class="form-label">Описание</label>
+                            <textarea class="form-control" id="editCompanyDescription" rows="4"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно редактирования отзыва -->
+    <div class="modal fade" id="editReviewModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редактировать отзыв</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editReviewForm">
+                        <input type="hidden" id="editReviewId">
+                        <div class="mb-3">
+                            <label for="editReviewRating" class="form-label">Оценка</label>
+                            <div class="rating-input">
+                                <i class="fas fa-star" data-rating="1"></i>
+                                <i class="fas fa-star" data-rating="2"></i>
+                                <i class="fas fa-star" data-rating="3"></i>
+                                <i class="fas fa-star" data-rating="4"></i>
+                                <i class="fas fa-star" data-rating="5"></i>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editReviewText" class="form-label">Отзыв</label>
+                            <textarea class="form-control" id="editReviewText" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

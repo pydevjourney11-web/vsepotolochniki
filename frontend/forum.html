@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ВП | Все потолочные - Форум</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-star"></i> ВП | Все потолочные
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="catalog.html">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="search.html">Поиск</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="forum.html">Форум</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="authButtons">
+                        <a class="nav-link" href="login.html">Вход</a>
+                        <a class="nav-link" href="register.html">Регистрация</a>
+                    </li>
+                    <li class="nav-item dropdown" id="userMenu" style="display: none;">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <span id="userName"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">Профиль</a></li>
+                            <li><a class="dropdown-item" href="add-company.html">Добавить компанию</a></li>
+                            <li id="moderationLink" style="display: none;"><a class="dropdown-item" href="moderation.html">Модерация</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Выход</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Фильтры</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="forumFilterForm">
+                            <div class="mb-3">
+                                <label for="forumSearch" class="form-label">Поиск</label>
+                                <input type="text" class="form-control" id="forumSearch" placeholder="Поиск по статьям">
+                            </div>
+                            <div class="mb-3">
+                                <label for="tagFilter" class="form-label">Тег</label>
+                                <select class="form-select" id="tagFilter">
+                                    <option value="">Все теги</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Применить</button>
+                            <button type="button" class="btn btn-outline-secondary w-100 mt-2" onclick="clearForumFilters()">Сбросить</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6>Популярные теги</h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="popularTags">
+                            <!-- Теги загружаются через JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-9">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Форум и статьи</h2>
+                    <div id="addArticleBtn" style="display: none;">
+                        <a href="add-article.html" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Написать статью
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Статьи -->
+                <div id="articlesList">
+                    <!-- Статьи загружаются через JS -->
+                </div>
+
+                <!-- Пагинация -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center" id="forumPagination">
+                        <!-- Пагинация загружается через JS -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для просмотра статьи -->
+    <div class="modal fade" id="articleModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="articleModalTitle">Статья</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="articleModalBody">
+                    <!-- Содержимое загружается через JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для комментария -->
+    <div class="modal fade" id="commentModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Добавить комментарий</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="commentForm">
+                        <input type="hidden" id="commentArticleId">
+                        <div class="mb-3" id="anonymousNameContainer" style="display: none;">
+                            <label for="anonymousName" class="form-label">Ваше имя</label>
+                            <input type="text" class="form-control" id="anonymousName" placeholder="Введите ваше имя">
+                        </div>
+                        <div class="mb-3">
+                            <label for="commentText" class="form-label">Комментарий</label>
+                            <textarea class="form-control" id="commentText" rows="4" placeholder="Ваш комментарий" required></textarea>
+                        </div>
+                        <div class="mb-3" id="captchaContainer" style="display: none;">
+                            <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/forum.js"></script>
+</body>
+</html>

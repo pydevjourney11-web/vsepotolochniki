@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест API</title>
+</head>
+<body>
+    <h1>Тест API</h1>
+    <button onclick="testHealth()">Тест Health</button>
+    <button onclick="testRegister()">Тест Регистрация</button>
+    <button onclick="testLogin()">Тест Вход</button>
+    <button onclick="testCreateCompany()">Тест Создание компании</button>
+    <div id="result"></div>
+
+    <script src="frontend/js/api.js"></script>
+    <script>
+        function log(message) {
+            document.getElementById('result').innerHTML += '<br>' + message;
+            console.log(message);
+        }
+
+        async function testHealth() {
+            try {
+                const response = await fetch('http://localhost:5000/api/health');
+                const data = await response.json();
+                log('Health OK: ' + JSON.stringify(data));
+            } catch (error) {
+                log('Health Error: ' + error.message);
+            }
+        }
+
+        async function testRegister() {
+            try {
+                const response = await api.register('Тест Пользователь', 'test@example.com', 'password123');
+                log('Register OK: ' + JSON.stringify(response));
+            } catch (error) {
+                log('Register Error: ' + error.message);
+            }
+        }
+
+        async function testLogin() {
+            try {
+                const response = await api.login('test@example.com', 'password123');
+                log('Login OK: ' + JSON.stringify(response));
+                if (response.access_token) {
+                    api.setToken(response.access_token);
+                    log('Token set successfully');
+                }
+            } catch (error) {
+                log('Login Error: ' + error.message);
+            }
+        }
+
+        async function testCreateCompany() {
+            try {
+                const data = {
+                    name: 'Тестовая компания',
+                    category: 'Тестирование',
+                    city: 'Москва',
+                    website: null,
+                    logo: null
+                };
+                const response = await api.createCompany(data);
+                log('Create Company OK: ' + JSON.stringify(response));
+            } catch (error) {
+                log('Create Company Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

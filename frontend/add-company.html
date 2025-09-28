@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ВП | Все потолочные - Добавить компанию</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-star"></i> ВП | Все потолочные
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="catalog.html">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="forum.html">Форум</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="authButtons">
+                        <a class="nav-link" href="login.html">Вход</a>
+                        <a class="nav-link" href="register.html">Регистрация</a>
+                    </li>
+                    <li class="nav-item dropdown" id="userMenu" style="display: none;">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <span id="userName"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">Профиль</a></li>
+                            <li><a class="dropdown-item active" href="add-company.html">Добавить компанию</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Выход</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-plus"></i> Добавить компанию</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="addCompanyForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="companyName" class="form-label">Название компании *</label>
+                                        <input type="text" class="form-control" id="companyName" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="companyCategory" class="form-label">Категория *</label>
+                                        <input type="text" class="form-control" id="companyCategory" required 
+                                               placeholder="Например: Ремонт, IT, Образование">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="companyCity" class="form-label">Город *</label>
+                                        <input type="text" class="form-control" id="companyCity" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="companyPhone" class="form-label">Телефон</label>
+                                        <input type="tel" class="form-control" id="companyPhone">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="companyWebsite" class="form-label">Сайт (необязательно)</label>
+                                        <input type="url" class="form-control" id="companyWebsite" 
+                                               placeholder="https://example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="companyLogo" class="form-label">Логотип (необязательно)</label>
+                                        <input type="url" class="form-control" id="companyLogo" 
+                                               placeholder="https://example.com/logo.jpg">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="companyAddress" class="form-label">Адрес</label>
+                                <input type="text" class="form-control" id="companyAddress">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="companyDescription" class="form-label">Описание</label>
+                                <textarea class="form-control" id="companyDescription" rows="4" 
+                                          placeholder="Расскажите о вашей компании, услугах, опыте работы..."></textarea>
+                            </div>
+                            
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Добавить компанию
+                                </button>
+                                <a href="catalog.html" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times"></i> Отмена
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Проверяем авторизацию
+        document.addEventListener('DOMContentLoaded', function() {
+            // Обновляем UI навигации
+            auth.updateUI();
+            
+            if (!auth.isAuthenticated()) {
+                // Показываем красивое сообщение вместо alert
+                document.body.innerHTML = `
+                    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+                        <div class="container">
+                            <a class="navbar-brand" href="index.html">
+                                <i class="fas fa-star"></i> ВП | Все потолочные
+                            </a>
+                        </div>
+                    </nav>
+                    <div class="container py-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <div class="card text-center">
+                                    <div class="card-body py-5">
+                                        <i class="fas fa-lock fa-3x text-muted mb-4"></i>
+                                        <h3>Требуется авторизация</h3>
+                                        <p class="text-muted mb-4">
+                                            Для добавления компании в каталог необходимо войти в систему
+                                        </p>
+                                        <div class="d-flex gap-3 justify-content-center">
+                                            <a href="login.html" class="btn btn-primary">
+                                                <i class="fas fa-sign-in-alt me-2"></i>Войти
+                                            </a>
+                                            <a href="register.html" class="btn btn-outline-primary">
+                                                <i class="fas fa-user-plus me-2"></i>Регистрация
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+        });
+
+        // Обработка формы
+        document.getElementById('addCompanyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Получаем значения полей
+            const name = document.getElementById('companyName').value.trim();
+            const category = document.getElementById('companyCategory').value.trim();
+            const city = document.getElementById('companyCity').value.trim();
+            const address = document.getElementById('companyAddress').value.trim();
+            const phone = document.getElementById('companyPhone').value.trim();
+            const website = document.getElementById('companyWebsite').value.trim();
+            const logo = document.getElementById('companyLogo').value.trim();
+            const description = document.getElementById('companyDescription').value.trim();
+            
+            // Проверяем обязательные поля
+            if (!name || !category || !city) {
+                alert('Пожалуйста, заполните все обязательные поля (название, категория, город)');
+                return;
+            }
+            
+            const data = {
+                name: name,
+                category: category,
+                city: city,
+                address: address || null,
+                phone: phone || null,
+                website: website || null,
+                logo: logo || null,
+                description: description || null
+            };
+            
+            try {
+                console.log('Отправляем данные:', data);
+                const response = await api.createCompany(data);
+                alert('Компания успешно добавлена!');
+                window.location.href = 'profile.html';
+            } catch (error) {
+                console.error('Ошибка при создании компании:', error);
+                alert('Ошибка: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
