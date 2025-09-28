@@ -41,28 +41,8 @@ def create_review():
     except Exception as e:
         print(f"❌ Пользователь не авторизован для отзыва: {e}")
         # Пользователь не авторизован - анонимный отзыв
-        # Проверяем капчу
-        captcha_response = data.get('captcha')
-        if not captcha_response:
-            return jsonify({'error': 'Captcha verification required for anonymous reviews'}), 400
-        
-        # Проверяем капчу с Google
-        captcha_secret = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJZe"  # Тестовый секретный ключ
-        captcha_verify_url = "https://www.google.com/recaptcha/api/siteverify"
-        
-        captcha_data = {
-            'secret': captcha_secret,
-            'response': captcha_response
-        }
-        
-        try:
-            captcha_result = requests.post(captcha_verify_url, data=captcha_data)
-            captcha_result = captcha_result.json()
-            
-            if not captcha_result.get('success'):
-                return jsonify({'error': 'Captcha verification failed'}), 400
-        except:
-            return jsonify({'error': 'Captcha verification failed'}), 400
+        # Капча отключена для тестирования
+        print("🔓 Капча отключена - пропускаем проверку")
         
         # Запрашиваем имя для анонимного отзыва
         anonymous_name = data.get('anonymous_name', 'Анонимный пользователь')

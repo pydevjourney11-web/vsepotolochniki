@@ -226,23 +226,16 @@ function setupReviewForm() {
                 reviewData.photos = []; // Пока без фотографий
             }
             
-            // Добавляем капчу и имя только для неавторизованных пользователей
+            // Добавляем имя только для неавторизованных пользователей (капча отключена)
             if (!auth.isAuthenticated()) {
-                const captchaResponse = grecaptcha.getResponse();
-                if (!captchaResponse) {
-                    alert('Пожалуйста, пройдите проверку капчи');
-                    return;
-                }
-                
                 const anonymousName = document.getElementById('anonymousName')?.value.trim();
                 if (!anonymousName) {
                     alert('Пожалуйста, введите ваше имя');
                     return;
                 }
                 
-                reviewData.captcha = captchaResponse;
                 reviewData.anonymous_name = anonymousName;
-                console.log('🔒 Добавлены данные для анонимного пользователя:', {captcha: captchaResponse, anonymous_name: anonymousName});
+                console.log('🔒 Добавлены данные для анонимного пользователя:', {anonymous_name: anonymousName});
             }
             
             console.log('📤 Отправляем данные:', reviewData);
