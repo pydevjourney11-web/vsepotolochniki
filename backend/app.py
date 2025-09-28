@@ -93,9 +93,19 @@ def init_database():
     try:
         with app.app_context():
             db.create_all()
-        return jsonify({'message': 'Database initialized successfully'}), 200
+            # Проверяем, что таблицы созданы
+            from backend.models import User
+            user_count = User.query.count()
+        return jsonify({
+            'message': 'Database initialized successfully',
+            'user_count': user_count
+        }), 200
     except Exception as e:
-        return jsonify({'error': f'Database initialization failed: {str(e)}'}), 500
+        import traceback
+        return jsonify({
+            'error': f'Database initialization failed: {str(e)}',
+            'traceback': traceback.format_exc()
+        }), 500
 
 @app.route('/api/health')
 def health_check():
@@ -121,7 +131,12 @@ def not_found(error):
 
 @app.errorhandler(500)
 def internal_error(error):
-    return jsonify({'error': 'Internal server error'}), 500
+    import traceback
+    return jsonify({
+        'error': 'Internal server error',
+        'details': str(error),
+        'traceback': traceback.format_exc()
+    }), 500
 
 @app.route('/api/upload', methods=['POST'])
 @jwt_required()
