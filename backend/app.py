@@ -19,20 +19,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:/
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'jwt-secret-string-change-in-production'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
-# Определяем папку для загрузок
-if os.environ.get('RENDER'):
-    # На Render используем временную папку
-    UPLOAD_FOLDER = '/tmp/uploads'
-else:
-    # Локально используем папку в проекте
-    UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
-
+# Определяем папку для загрузок - всегда используем папку в проекте
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 # Создаем папку для загрузок
 try:
-    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     print(f"✅ Папка загрузок создана: {app.config['UPLOAD_FOLDER']}")
     print(f"✅ Переменная RENDER: {os.environ.get('RENDER')}")
     print(f"✅ Текущая рабочая директория: {os.getcwd()}")
@@ -314,6 +308,24 @@ def uploaded_file(filename):
         print(f"❌ Ошибка при обслуживании файла {filename}: {e}")
         return jsonify({'error': 'File not found'}), 404
 
+@app.route('/uploads/<filename>')
+def uploaded_file_alt(filename):
+    """Альтернативный endpoint для обслуживания файлов"""
+    try:
+        print(f"📁 Альтернативный запрос файла: {filename}")
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        print(f"📁 Путь к файлу: {file_path}")
+        print(f"📁 Файл существует: {os.path.exists(file_path)}")
+        
+        if os.path.exists(file_path):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+        else:
+            print(f"❌ Файл не найден: {file_path}")
+            return jsonify({'error': 'File not found'}), 404
+    except Exception as e:
+        print(f"❌ Ошибка при обслуживании файла {filename}: {e}")
+        return jsonify({'error': 'File not found'}), 404
+
 @app.route('/api/debug-uploads')
 def debug_uploads():
     """Отладочный endpoint для проверки загруженных файлов"""
@@ -403,7 +415,7 @@ def init_db():
     with app.app_context():
         try:
             print(f"🗄️ Подключение к базе данных: {app.config['SQLALCHEMY_DATABASE_URI']}")
-            db.create_all()
+        db.create_all()
             print("✅ Таблицы базы данных созданы/обновлены")
             
             # Создаем администратора если его нет
