@@ -4,6 +4,7 @@ class API {
         this.baseURL = '/api';
         this.token = localStorage.getItem('token');
         console.log('API initialized with token:', this.token ? 'present' : 'missing');
+        console.log('Token value:', this.token);
     }
 
     // Установка токена
@@ -11,6 +12,7 @@ class API {
         this.token = token;
         localStorage.setItem('token', token);
         console.log('Token updated:', token ? 'present' : 'missing');
+        console.log('Current token value:', this.token);
     }
 
     // Удаление токена
@@ -33,6 +35,9 @@ class API {
 
         if (this.token) {
             config.headers['Authorization'] = `Bearer ${this.token}`;
+            console.log('Adding Authorization header:', `Bearer ${this.token}`);
+        } else {
+            console.log('No token available, request will be anonymous');
         }
 
         try {

@@ -177,6 +177,19 @@
             }
             
             try {
+                // Проверяем токен перед отправкой
+                console.log('Before creating article:');
+                console.log('Auth is authenticated:', auth.isAuthenticated());
+                console.log('API token:', api.token);
+                console.log('LocalStorage token:', localStorage.getItem('token'));
+                
+                // Обновляем токен в API если он есть в localStorage
+                const storedToken = localStorage.getItem('token');
+                if (storedToken && !api.token) {
+                    api.setToken(storedToken);
+                    console.log('Token restored from localStorage');
+                }
+                
                 const response = await api.createArticle(data);
                 alert('Статья успешно опубликована!');
                 window.location.href = 'forum.html';

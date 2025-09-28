@@ -88,6 +88,10 @@ def get_article(article_id):
 def create_article():
     data = request.get_json()
     
+    # Логируем заголовки для отладки
+    print(f"📝 Заголовки запроса: {dict(request.headers)}")
+    print(f"📝 Данные запроса: {data}")
+    
     if not data or not data.get('title') or not data.get('content'):
         return jsonify({'error': 'Title and content are required'}), 400
     
@@ -98,8 +102,10 @@ def create_article():
     try:
         user_id = get_jwt_identity()
         user_id = int(user_id)
+        print(f"✅ Пользователь авторизован: {user_id}")
         # Пользователь авторизован - пропускаем капчу
-    except:
+    except Exception as e:
+        print(f"❌ Пользователь не авторизован: {e}")
         # Пользователь не авторизован - анонимная статья
         # Проверяем капчу
         captcha_response = data.get('captcha')
