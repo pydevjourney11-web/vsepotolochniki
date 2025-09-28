@@ -1,7 +1,7 @@
 // API класс для работы с backend
 class API {
     constructor() {
-        this.baseURL = 'http://127.0.0.1:5000/api';
+        this.baseURL = '/api';
         this.token = localStorage.getItem('token');
         console.log('API initialized with token:', this.token ? 'present' : 'missing');
     }

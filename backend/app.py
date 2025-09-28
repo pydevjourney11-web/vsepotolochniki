@@ -49,13 +49,32 @@ app.register_blueprint(search_bp, url_prefix='/api/search')
 def index():
     return send_from_directory('frontend', 'index.html')
 
-@app.route('/<path:path>')
-def serve_static(path):
-    return send_from_directory('frontend', path)
+@app.route('/js/<path:filename>')
+def serve_js(filename):
+    return send_from_directory('frontend/js', filename)
+
+@app.route('/css/<path:filename>')
+def serve_css(filename):
+    return send_from_directory('frontend/css', filename)
+
+@app.route('/<path:filename>')
+def serve_html(filename):
+    # Исключаем API маршруты
+    if filename.startswith('api/'):
+        return jsonify({'error': 'Not found'}), 404
+    return send_from_directory('frontend', filename)
 
 @app.route('/api/health')
 def health_check():
-    return jsonify({'status': 'ok', 'message': 'Server is running'})
+    return jsonify({'status': 'ok', 'message': 'Server is running', 'timestamp': datetime.utcnow().isoformat()})
+
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({'error': 'Not found'}), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return jsonify({'error': 'Internal server error'}), 500
 
 @app.route('/api/upload', methods=['POST'])
 @jwt_required()
