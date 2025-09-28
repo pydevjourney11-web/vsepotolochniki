@@ -16,23 +16,43 @@ document.addEventListener('DOMContentLoaded', function() {
 // Загрузка профиля пользователя
 async function loadUserProfile() {
     try {
+        console.log('Loading user profile...');
         const user = await api.getProfile();
+        console.log('Profile data received:', user);
         displayUserProfile(user);
     } catch (error) {
-        handleError(error, 'загрузки профиля');
+        console.error('Error loading profile:', error);
+        // Fallback: используем данные из localStorage
+        const localUser = auth.getCurrentUser();
+        if (localUser) {
+            console.log('Using local user data:', localUser);
+            displayUserProfile(localUser);
+        } else {
+            handleError(error, 'загрузки профиля');
+        }
     }
 }
 
 // Отображение профиля пользователя
 function displayUserProfile(user) {
+    console.log('Displaying user profile:', user);
     const userName = document.getElementById('userProfileName');
     const userEmail = document.getElementById('userEmail');
     const userAvatar = document.getElementById('userAvatar');
     
-    if (userName) userName.textContent = user.name;
-    if (userEmail) userEmail.textContent = user.email;
+    console.log('Elements found:', { userName, userEmail, userAvatar });
+    
+    if (userName) {
+        userName.textContent = user.name;
+        console.log('Set user name to:', user.name);
+    }
+    if (userEmail) {
+        userEmail.textContent = user.email;
+        console.log('Set user email to:', user.email);
+    }
     if (userAvatar) {
         userAvatar.src = user.avatar || 'https://via.placeholder.com/100';
+        console.log('Set user avatar to:', user.avatar || 'https://via.placeholder.com/100');
     }
 }
 

@@ -101,10 +101,8 @@ def init_database():
             'user_count': user_count
         }), 200
     except Exception as e:
-        import traceback
         return jsonify({
-            'error': f'Database initialization failed: {str(e)}',
-            'traceback': traceback.format_exc()
+            'error': f'Database initialization failed: {str(e)}'
         }), 500
 
 @app.route('/api/health')
@@ -131,11 +129,9 @@ def not_found(error):
 
 @app.errorhandler(500)
 def internal_error(error):
-    import traceback
     return jsonify({
         'error': 'Internal server error',
-        'details': str(error),
-        'traceback': traceback.format_exc()
+        'details': str(error)
     }), 500
 
 @app.route('/api/upload', methods=['POST'])
@@ -176,9 +172,8 @@ def init_db():
     with app.app_context():
         try:
             db.create_all()
-            print("Database tables created successfully")
         except Exception as e:
-            print(f"Error creating database tables: {e}")
+            pass  # Игнорируем ошибки при инициализации
 
 # Инициализируем базу данных при запуске
 init_db()
