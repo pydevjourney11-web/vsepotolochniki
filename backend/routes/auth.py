@@ -77,6 +77,7 @@ def login():
         if user.email == 'admin@test.com' and user.role != 'admin':
             user.role = 'admin'
             db.session.commit()
+        
         access_token = create_access_token(identity=str(user.id))
         return jsonify({
             'message': 'Login successful',
@@ -90,6 +91,48 @@ def login():
         })
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
+
+@auth_bp.route('/create-admin', methods=['POST'])
+def create_admin():
+    """Создание тестового админа"""
+    try:
+        # Проверяем, существует ли уже админ
+        admin_user = User.query.filter_by(email='admin@test.com').first()
+        if admin_user:
+            return jsonify({
+                'message': 'Admin user already exists',
+                'user': {
+                    'id': admin_user.id,
+                    'email': admin_user.email,
+                    'name': admin_user.name,
+                    'role': admin_user.role
+                }
+            })
+        
+        # Создаем админа
+        admin_user = User(
+            email='admin@test.com',
+            password=generate_password_hash('admin123'),
+            name='Администратор',
+            role='admin'
+        )
+        
+        db.session.add(admin_user)
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Admin user created successfully',
+            'user': {
+                'id': admin_user.id,
+                'email': admin_user.email,
+                'name': admin_user.name,
+                'role': admin_user.role
+            }
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Failed to create admin: {str(e)}'}), 500
 
 @auth_bp.route('/profile', methods=['GET'])
 @jwt_required()
