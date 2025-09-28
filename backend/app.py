@@ -23,7 +23,11 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 # Создаем папку для загрузок
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+try:
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    print(f"✅ Папка загрузок создана: {app.config['UPLOAD_FOLDER']}")
+except Exception as e:
+    print(f"⚠️ Не удалось создать папку загрузок: {e}")
 
 # Импортируем db из models
 from backend.models import db, User, Company, Review, Article, Comment
