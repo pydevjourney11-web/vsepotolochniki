@@ -223,7 +223,15 @@ function setupReviewForm() {
             
             // TODO: Загрузка фотографий
             if (photos.length > 0) {
-                reviewData.photos = []; // Пока без фотографий
+                try {
+                    const uploadResult = await api.uploadPhotos(photos);
+                    reviewData.photos = uploadResult.files;
+                    console.log('📸 Фотографии отзыва загружены:', uploadResult.files);
+                } catch (error) {
+                    console.error('Ошибка загрузки фотографий:', error);
+                    alert('Ошибка загрузки фотографий: ' + error.message);
+                    return;
+                }
             }
             
             console.log('📤 Отправляем данные:', reviewData);

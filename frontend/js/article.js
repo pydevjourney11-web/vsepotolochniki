@@ -152,7 +152,14 @@ function displayComments(comments) {
                     </div>
                 ` : ''}
             </div>
-            <p class="mb-0">${comment.text}</p>
+            <p class="mb-2">${comment.text}</p>
+            ${comment.photos && comment.photos.length > 0 ? `
+                <div class="comment-photos mt-2">
+                    ${comment.photos.map(photo => `
+                        <img src="/static/uploads/${photo}" alt="Фото комментария" class="comment-photo me-2 mb-2" style="max-width: 150px; max-height: 150px; object-fit: cover; border-radius: 8px; cursor: pointer;" onclick="openPhotoModal('/static/uploads/${photo}')">
+                    `).join('')}
+                </div>
+            ` : ''}
         </div>
     `).join('');
 }
@@ -457,7 +464,29 @@ function formatDate(dateString) {
     });
 }
 
-// Инициализация при загрузке страницы
-document.addEventListener('DOMContentLoaded', function() {
-    setupPhotoPreview();
-});
+// Открытие модального окна с фотографией
+function openPhotoModal(photoUrl) {
+    const modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.innerHTML = `
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Фотография</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="${photoUrl}" class="img-fluid" alt="Фотография">
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
+    
+    modal.addEventListener('hidden.bs.modal', () => {
+        document.body.removeChild(modal);
+    });
+}
