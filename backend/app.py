@@ -21,7 +21,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Импортируем db из models
-from models import db, User, Company, Review, Article, Comment
+from backend.models import db, User, Company, Review, Article, Comment
 
 # Инициализируем расширения
 db.init_app(app)
@@ -30,12 +30,12 @@ jwt = JWTManager(app)
 CORS(app)  # Разрешаем CORS для всех доменов
 
 # Импортируем роуты
-from routes.auth import auth_bp
-from routes.catalog import catalog_bp
-from routes.forum import forum_bp
-from routes.reviews import reviews_bp
-from routes.moderation import moderation_bp
-from routes.search import search_bp
+from backend.routes.auth import auth_bp
+from backend.routes.catalog import catalog_bp
+from backend.routes.forum import forum_bp
+from backend.routes.reviews import reviews_bp
+from backend.routes.moderation import moderation_bp
+from backend.routes.search import search_bp
 
 # Регистрируем блюпринты
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
@@ -47,11 +47,11 @@ app.register_blueprint(search_bp, url_prefix='/api/search')
 
 @app.route('/')
 def index():
-    return send_from_directory('../frontend', 'index.html')
+    return send_from_directory('frontend', 'index.html')
 
 @app.route('/<path:path>')
 def serve_static(path):
-    return send_from_directory('../frontend', path)
+    return send_from_directory('frontend', path)
 
 @app.route('/api/health')
 def health_check():

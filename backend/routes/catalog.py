@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import db, Company, User, Review
+from backend.models import db, Company, User, Review
 import json
 
 catalog_bp = Blueprint('catalog', __name__)
