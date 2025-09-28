@@ -208,6 +208,49 @@ def update_database():
             'error': f'Ошибка при обновлении базы данных: {str(e)}'
         }), 500
 
+@app.route('/api/update-comment-photos', methods=['GET', 'POST'])
+def update_comment_photos():
+    """Добавление поля photos в таблицу comment"""
+    try:
+        from sqlalchemy import text
+        
+        print("🔧 Добавляем поле photos в таблицу comment...")
+        
+        # Проверяем, существует ли поле photos
+        result = db.session.execute(text("""
+            SELECT column_name 
+            FROM information_schema.columns 
+            WHERE table_name = 'comment' AND column_name = 'photos'
+        """))
+        
+        if result.fetchone():
+            print("ℹ️ Поле photos уже существует в таблице comment")
+            return jsonify({
+                'success': True,
+                'message': 'Поле photos уже существует в таблице comment'
+            })
+        else:
+            print("🔧 Добавляем поле photos в таблицу comment...")
+            
+            # Добавляем поле photos
+            db.session.execute(text("ALTER TABLE comment ADD COLUMN photos TEXT"))
+            db.session.commit()
+            
+            print("✅ Поле photos успешно добавлено в таблицу comment!")
+            
+            return jsonify({
+                'success': True,
+                'message': 'Поле photos успешно добавлено в таблицу comment!'
+            })
+            
+    except Exception as e:
+        print(f"❌ Ошибка при добавлении поля photos: {e}")
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'error': f'Ошибка при добавлении поля photos: {str(e)}'
+        }), 500
+
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({'error': 'Not found'}), 404

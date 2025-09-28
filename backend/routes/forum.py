@@ -275,13 +275,31 @@ def create_comment(article_id):
         status='approved'  # Автоматически одобряем комментарии
     )
     
-    db.session.add(comment)
-    db.session.commit()
-    
-    return jsonify({
-        'message': 'Comment created successfully',
-        'comment': comment.to_dict()
-    }), 201
+    try:
+        db.session.add(comment)
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Comment created successfully',
+            'comment': comment.to_dict()
+        })
+    except Exception as e:
+        print(f"❌ Ошибка при создании комментария: {e}")
+        db.session.rollback()
+        
+        # Если ошибка связана с полем photos, создаем комментарий без фото
+        if 'photos' in str(e):
+            print("🔧 Поле photos не существует, создаем комментарий без фото...")
+            comment.photos = None
+            db.session.add(comment)
+            db.session.commit()
+            
+            return jsonify({
+                'message': 'Comment created successfully (without photos)',
+                'comment': comment.to_dict()
+            })
+        else:
+            return jsonify({'error': 'Failed to create comment'}), 500, 201
 
 @forum_bp.route('/comments/<int:comment_id>', methods=['PUT'])
 @jwt_required()
