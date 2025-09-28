@@ -239,8 +239,23 @@ document.getElementById('commentForm').addEventListener('submit', async function
     try {
         const commentData = {
             text: text,
-            article_id: currentArticleId
+            article_id: currentArticleId,
+            photos: [] // Массив для фотографий
         };
+        
+        // Загружаем фотографии если есть
+        const photoFiles = document.getElementById('commentPhotos').files;
+        if (photoFiles.length > 0) {
+            try {
+                const uploadResult = await api.uploadPhotos(photoFiles);
+                commentData.photos = uploadResult.files;
+                console.log('📸 Фотографии загружены:', uploadResult.files);
+            } catch (error) {
+                console.error('Ошибка загрузки фотографий:', error);
+                alert('Ошибка загрузки фотографий: ' + error.message);
+                return;
+            }
+        }
         
         // Добавляем имя только для неавторизованных пользователей (капча отключена)
         if (!auth.isAuthenticated()) {
@@ -263,6 +278,8 @@ document.getElementById('commentForm').addEventListener('submit', async function
         // Очищаем форму
         document.getElementById('commentText').value = '';
         document.getElementById('anonymousName').value = '';
+        document.getElementById('commentPhotos').value = '';
+        document.getElementById('photoPreview').innerHTML = '';
         if (typeof grecaptcha !== 'undefined') {
             grecaptcha.reset();
         }
@@ -360,6 +377,74 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
+// Предварительный просмотр фотографий
+function setupPhotoPreview() {
+    const photoInput = document.getElementById('commentPhotos');
+    const previewContainer = document.getElementById('photoPreview');
+    
+    if (!photoInput || !previewContainer) return;
+    
+    photoInput.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        
+        // Очищаем предыдущий предварительный просмотр
+        previewContainer.innerHTML = '';
+        
+        // Проверяем количество файлов
+        if (files.length > 5) {
+            alert('Максимум 5 фотографий!');
+            photoInput.value = '';
+            return;
+        }
+        
+        // Проверяем размер файлов
+        files.forEach(file => {
+            if (file.size > 5 * 1024 * 1024) {
+                alert(`Файл ${file.name} слишком большой! Максимум 5MB.`);
+                photoInput.value = '';
+                return;
+            }
+        });
+        
+        // Создаем предварительный просмотр
+        files.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewDiv = document.createElement('div');
+                previewDiv.className = 'photo-preview me-2 mb-2 d-inline-block';
+                previewDiv.innerHTML = `
+                    <div class="position-relative">
+                        <img src="${e.target.result}" class="img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;">
+                        <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" style="transform: translate(50%, -50%);" onclick="removePhotoPreview(${index})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                previewContainer.appendChild(previewDiv);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+}
+
+// Удаление фотографии из предварительного просмотра
+function removePhotoPreview(index) {
+    const photoInput = document.getElementById('commentPhotos');
+    const dt = new DataTransfer();
+    const files = Array.from(photoInput.files);
+    
+    files.forEach((file, i) => {
+        if (i !== index) {
+            dt.items.add(file);
+        }
+    });
+    
+    photoInput.files = dt.files;
+    
+    // Перезапускаем событие change для обновления предварительного просмотра
+    photoInput.dispatchEvent(new Event('change'));
+}
+
 // Форматирование даты
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -371,3 +456,8 @@ function formatDate(dateString) {
         minute: '2-digit'
     });
 }
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    setupPhotoPreview();
+});

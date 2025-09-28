@@ -184,6 +184,12 @@
                             <label for="commentText" class="form-label">Комментарий</label>
                             <textarea class="form-control" id="commentText" rows="4" placeholder="Ваш комментарий" required></textarea>
                         </div>
+                        <div class="mb-3">
+                            <label for="commentPhotos" class="form-label">Фотографии (до 5 штук)</label>
+                            <input type="file" class="form-control" id="commentPhotos" multiple accept="image/*">
+                            <div class="form-text">Максимум 5 фотографий, до 5MB каждая. Поддерживаемые форматы: JPG, PNG, GIF, WebP</div>
+                            <div id="photoPreview" class="mt-2"></div>
+                        </div>
                         <div class="mb-3" id="captchaContainer" style="display: none;">
                             <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
                         </div>
