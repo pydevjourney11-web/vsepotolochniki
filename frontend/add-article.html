@@ -145,7 +145,7 @@
                 return;
             }
             
-            // Проверяем капчу для неавторизованных пользователей
+            // Проверяем капчу только для неавторизованных пользователей
             if (!auth.isAuthenticated()) {
                 const captchaResponse = grecaptcha.getResponse();
                 if (!captchaResponse) {
@@ -170,7 +170,7 @@
                 tags: tags
             };
             
-            // Добавляем капчу и имя для неавторизованных пользователей
+            // Добавляем капчу и имя только для неавторизованных пользователей
             if (!auth.isAuthenticated()) {
                 data.captcha = grecaptcha.getResponse();
                 data.anonymous_author = document.getElementById('anonymousAuthor').value.trim();

@@ -98,6 +98,7 @@ def create_article():
     try:
         user_id = get_jwt_identity()
         user_id = int(user_id)
+        # Пользователь авторизован - пропускаем капчу
     except:
         # Пользователь не авторизован - анонимная статья
         # Проверяем капчу
@@ -264,6 +265,7 @@ def create_comment(article_id):
     try:
         user_id = get_jwt_identity()
         user_id = int(user_id)
+        # Пользователь авторизован - пропускаем капчу
     except:
         # Пользователь не авторизован - анонимный комментарий
         # Проверяем капчу
