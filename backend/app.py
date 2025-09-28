@@ -88,14 +88,31 @@ def test():
     </html>
     '''.format(FRONTEND_DIR, os.path.exists(FRONTEND_DIR))
 
+@app.route('/api/init-db', methods=['POST'])
+def init_database():
+    try:
+        with app.app_context():
+            db.create_all()
+        return jsonify({'message': 'Database initialized successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': f'Database initialization failed: {str(e)}'}), 500
+
 @app.route('/api/health')
 def health_check():
+    try:
+        # Проверяем подключение к базе данных
+        db.session.execute('SELECT 1')
+        db_status = 'connected'
+    except Exception as e:
+        db_status = f'error: {str(e)}'
+    
     return jsonify({
         'status': 'ok', 
         'message': 'Server is running', 
         'timestamp': datetime.utcnow().isoformat(),
         'frontend_dir': FRONTEND_DIR,
-        'frontend_exists': os.path.exists(FRONTEND_DIR)
+        'frontend_exists': os.path.exists(FRONTEND_DIR),
+        'database_status': db_status
     })
 
 @app.errorhandler(404)
@@ -139,7 +156,17 @@ def allowed_file(filename):
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-if __name__ == '__main__':
+# Инициализация базы данных
+def init_db():
     with app.app_context():
-        db.create_all()
+        try:
+            db.create_all()
+            print("Database tables created successfully")
+        except Exception as e:
+            print(f"Error creating database tables: {e}")
+
+# Инициализируем базу данных при запуске
+init_db()
+
+if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

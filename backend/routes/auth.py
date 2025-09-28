@@ -7,38 +7,43 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
-    data = request.get_json()
-    
-    if not data or not data.get('email') or not data.get('password') or not data.get('name'):
-        return jsonify({'error': 'Email, password and name are required'}), 400
-    
-    # Проверяем, существует ли пользователь
-    if User.query.filter_by(email=data['email']).first():
-        return jsonify({'error': 'User already exists'}), 400
-    
-    # Создаем нового пользователя
-    user = User(
-        email=data['email'],
-        password=generate_password_hash(data['password']),
-        name=data['name']
-    )
-    
-    db.session.add(user)
-    db.session.commit()
-    
-    # Создаем токен
-    access_token = create_access_token(identity=str(user.id))
-    
-    return jsonify({
-        'message': 'User created successfully',
-        'access_token': access_token,
-        'user': {
-            'id': user.id,
-            'email': user.email,
-            'name': user.name,
-            'role': user.role
-        }
-    }), 201
+    try:
+        data = request.get_json()
+        
+        if not data or not data.get('email') or not data.get('password') or not data.get('name'):
+            return jsonify({'error': 'Email, password and name are required'}), 400
+        
+        # Проверяем, существует ли пользователь
+        if User.query.filter_by(email=data['email']).first():
+            return jsonify({'error': 'User already exists'}), 400
+        
+        # Создаем нового пользователя
+        user = User(
+            email=data['email'],
+            password=generate_password_hash(data['password']),
+            name=data['name']
+        )
+        
+        db.session.add(user)
+        db.session.commit()
+        
+        # Создаем токен
+        access_token = create_access_token(identity=str(user.id))
+        
+        return jsonify({
+            'message': 'User created successfully',
+            'access_token': access_token,
+            'user': {
+                'id': user.id,
+                'email': user.email,
+                'name': user.name,
+                'role': user.role
+            }
+        }), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Registration failed: {str(e)}'}), 500
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
