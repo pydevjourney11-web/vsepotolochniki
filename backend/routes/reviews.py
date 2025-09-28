@@ -1,15 +1,17 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 from backend.models import db, Review, Company, User
 import json
 
 reviews_bp = Blueprint('reviews', __name__)
 
 @reviews_bp.route('/', methods=['POST'])
-@jwt_required()
 def create_review():
-    user_id = get_jwt_identity()
     data = request.get_json()
+    
+    # Логируем заголовки для отладки
+    print(f"📝 Заголовки запроса отзыва: {dict(request.headers)}")
+    print(f"📝 Данные запроса отзыва: {data}")
     
     if not data or not data.get('company_id') or not data.get('rating'):
         return jsonify({'error': 'Company ID and rating are required'}), 400
@@ -20,15 +22,56 @@ def create_review():
     # Проверяем, что компания существует
     company = Company.query.get_or_404(company_id)
     
-    # Проверяем, что пользователь не оставлял отзыв на эту компанию
-    existing_review = Review.query.filter_by(company_id=company_id, user_id=int(user_id)).first()
-    if existing_review:
-        return jsonify({'error': 'You have already reviewed this company'}), 400
+    # Проверяем авторизацию
+    user_id = None
+    anonymous_name = None
+    
+    try:
+        verify_jwt_in_request()
+        user_id = get_jwt_identity()
+        user_id = int(user_id)
+        print(f"✅ Пользователь авторизован для отзыва: {user_id}")
+        
+        # Проверяем, что пользователь не оставлял отзыв на эту компанию
+        existing_review = Review.query.filter_by(company_id=company_id, user_id=user_id).first()
+        if existing_review:
+            return jsonify({'error': 'You have already reviewed this company'}), 400
+            
+    except Exception as e:
+        print(f"❌ Пользователь не авторизован для отзыва: {e}")
+        # Пользователь не авторизован - анонимный отзыв
+        # Проверяем капчу
+        captcha_response = data.get('captcha')
+        if not captcha_response:
+            return jsonify({'error': 'Captcha verification required for anonymous reviews'}), 400
+        
+        # Проверяем капчу с Google
+        import requests
+        captcha_secret = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJZe"  # Тестовый секретный ключ
+        captcha_verify_url = "https://www.google.com/recaptcha/api/siteverify"
+        
+        captcha_data = {
+            'secret': captcha_secret,
+            'response': captcha_response
+        }
+        
+        try:
+            captcha_result = requests.post(captcha_verify_url, data=captcha_data)
+            captcha_result = captcha_result.json()
+            
+            if not captcha_result.get('success'):
+                return jsonify({'error': 'Captcha verification failed'}), 400
+        except:
+            return jsonify({'error': 'Captcha verification failed'}), 400
+        
+        # Запрашиваем имя для анонимного отзыва
+        anonymous_name = data.get('anonymous_name', 'Анонимный пользователь')
     
     # Создаем отзыв
     review = Review(
         company_id=company_id,
-        user_id=int(user_id),
+        user_id=user_id,
+        anonymous_name=anonymous_name,
         rating=rating,
         text=data.get('text'),
         photos=json.dumps(data.get('photos', [])),

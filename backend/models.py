@@ -66,7 +66,8 @@ class Company(db.Model):
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # Может быть NULL для анонимных
+    anonymous_name = db.Column(db.String(100))  # Имя для анонимных отзывов
     rating = db.Column(db.Integer, nullable=False)  # 1-5 звезд
     text = db.Column(db.Text)
     photos = db.Column(db.Text)  # JSON array of photo paths
@@ -81,9 +82,13 @@ class Review(db.Model):
             'photos': json.loads(self.photos) if self.photos else [],
             'created_at': self.created_at.isoformat(),
             'author': {
-                'id': self.author.id,
-                'name': self.author.name,
-                'avatar': self.author.avatar
+                'id': self.author.id if self.author else None,
+                'name': self.author.name if self.author else self.anonymous_name,
+                'avatar': self.author.avatar if self.author else None
+            } if self.author else {
+                'id': None,
+                'name': self.anonymous_name or 'Анонимный пользователь',
+                'avatar': None
             }
         }
 

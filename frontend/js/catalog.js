@@ -435,6 +435,24 @@ document.getElementById('reviewForm').addEventListener('submit', async function(
             reviewData.photos = []; // Пока без фотографий
         }
         
+        // Добавляем капчу и имя только для неавторизованных пользователей
+        if (!auth.isAuthenticated()) {
+            const captchaResponse = grecaptcha.getResponse();
+            if (!captchaResponse) {
+                alert('Пожалуйста, пройдите проверку капчи');
+                return;
+            }
+            
+            const anonymousName = document.getElementById('anonymousName')?.value.trim();
+            if (!anonymousName) {
+                alert('Пожалуйста, введите ваше имя');
+                return;
+            }
+            
+            reviewData.captcha = captchaResponse;
+            reviewData.anonymous_name = anonymousName;
+        }
+        
         await api.createReview(reviewData);
         
         showNotification('Отзыв успешно добавлен!', 'success');
