@@ -149,11 +149,13 @@ def health_check():
         'admin_exists': admin_exists
     })
 
-@app.route('/api/update-db', methods=['POST'])
+@app.route('/api/update-db', methods=['GET', 'POST'])
 def update_database():
     """Обновление схемы базы данных для продакшена"""
     try:
         from sqlalchemy import text
+        
+        print("🔧 Начинаем обновление базы данных...")
         
         # Проверяем текущий размер поля password
         result = db.session.execute(text("""
@@ -173,22 +175,29 @@ def update_database():
                 db.session.execute(text("ALTER TABLE \"user\" ALTER COLUMN password TYPE VARCHAR(200)"))
                 db.session.commit()
                 
+                print("✅ Поле password успешно обновлено!")
+                
                 return jsonify({
                     'success': True,
-                    'message': 'Поле password успешно обновлено до 200 символов!'
+                    'message': 'Поле password успешно обновлено до 200 символов!',
+                    'old_length': current_length[0],
+                    'new_length': 200
                 })
             else:
                 return jsonify({
                     'success': True,
-                    'message': 'Поле password уже имеет достаточный размер'
+                    'message': 'Поле password уже имеет достаточный размер',
+                    'current_length': current_length[0]
                 })
         else:
+            print("❌ Таблица user не найдена")
             return jsonify({
                 'success': False,
                 'error': 'Таблица user не найдена'
             }), 404
             
     except Exception as e:
+        print(f"❌ Ошибка при обновлении базы данных: {e}")
         db.session.rollback()
         return jsonify({
             'success': False,
