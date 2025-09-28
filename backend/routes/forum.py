@@ -270,7 +270,9 @@ def create_comment(article_id):
         article_id=article_id,
         user_id=user_id,
         anonymous_name=anonymous_name,
-        text=data['text']
+        text=data['text'],
+        photos=json.dumps(data.get('photos', [])),
+        status='approved'  # Автоматически одобряем комментарии
     )
     
     db.session.add(comment)

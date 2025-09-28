@@ -297,6 +297,30 @@ class API {
 
         return response.json();
     }
+
+    // Загрузка фотографий для комментариев
+    async uploadPhotos(files) {
+        const formData = new FormData();
+        
+        // Добавляем файлы в FormData
+        for (let i = 0; i < files.length; i++) {
+            formData.append('photos', files[i]);
+        }
+        
+        const response = await fetch(`${this.baseURL}/upload-photos`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${this.token}`
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('Ошибка загрузки фотографий');
+        }
+
+        return response.json();
+    }
 }
 
 // Создаем глобальный экземпляр API

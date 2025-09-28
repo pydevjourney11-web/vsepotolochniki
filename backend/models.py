@@ -138,6 +138,7 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # Может быть None для анонимных
     anonymous_name = db.Column(db.String(100), nullable=True)  # Имя для анонимных комментариев
     text = db.Column(db.Text, nullable=False)
+    photos = db.Column(db.Text)  # JSON array of photo paths
     status = db.Column(db.String(20), default='approved')  # pending, approved, rejected
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
@@ -147,6 +148,7 @@ class Comment(db.Model):
             return {
                 'id': self.id,
                 'text': self.text,
+                'photos': json.loads(self.photos) if self.photos else [],
                 'created_at': self.created_at.isoformat(),
                 'author': {
                     'id': self.author.id,
@@ -159,6 +161,7 @@ class Comment(db.Model):
             return {
                 'id': self.id,
                 'text': self.text,
+                'photos': json.loads(self.photos) if self.photos else [],
                 'created_at': self.created_at.isoformat(),
                 'author': {
                     'id': None,

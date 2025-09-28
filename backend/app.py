@@ -252,6 +252,53 @@ def allowed_file(filename):
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+# API для загрузки фотографий
+@app.route('/api/upload-photos', methods=['POST'])
+def upload_photos():
+    """Загрузка фотографий для комментариев и отзывов"""
+    try:
+        if 'photos' not in request.files:
+            return jsonify({'error': 'No photos provided'}), 400
+        
+        files = request.files.getlist('photos')
+        
+        if len(files) > 5:
+            return jsonify({'error': 'Maximum 5 photos allowed'}), 400
+        
+        uploaded_files = []
+        
+        for file in files:
+            if file and file.filename:
+                # Проверяем расширение файла
+                if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')):
+                    return jsonify({'error': 'Only image files are allowed'}), 400
+                
+                # Проверяем размер файла (5MB)
+                if len(file.read()) > 5 * 1024 * 1024:
+                    return jsonify({'error': 'File size too large (max 5MB)'}), 400
+                
+                file.seek(0)  # Возвращаем указатель в начало
+                
+                # Генерируем уникальное имя файла
+                filename = secure_filename(file.filename)
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                unique_filename = f"{timestamp}_{filename}"
+                
+                # Сохраняем файл
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+                file.save(file_path)
+                
+                uploaded_files.append(unique_filename)
+        
+        return jsonify({
+            'message': 'Photos uploaded successfully',
+            'files': uploaded_files
+        })
+        
+    except Exception as e:
+        print(f"❌ Ошибка загрузки фотографий: {e}")
+        return jsonify({'error': 'Failed to upload photos'}), 500
+
 # Инициализация базы данных
 def init_db():
     with app.app_context():

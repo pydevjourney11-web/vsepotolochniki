@@ -298,6 +298,13 @@ function showArticleModal(article) {
                                 ` : ''}
                             </div>
                             <p class="mb-0">${comment.text}</p>
+                            ${comment.photos && comment.photos.length > 0 ? `
+                                <div class="comment-photos mt-2">
+                                    ${comment.photos.map(photo => `
+                                        <img src="/static/uploads/${photo}" alt="Фото комментария" class="comment-photo me-2 mb-2" style="max-width: 150px; max-height: 150px; object-fit: cover; border-radius: 8px; cursor: pointer;" onclick="openPhotoModal('/static/uploads/${photo}')">
+                                    `).join('')}
+                                </div>
+                            ` : ''}
                         </div>
                     `).join('')}
                 </div>
@@ -352,8 +359,23 @@ document.getElementById('commentForm').addEventListener('submit', async function
     try {
         const commentData = {
             text: text,
-            article_id: articleId
+            article_id: articleId,
+            photos: [] // Массив для фотографий
         };
+        
+        // Загружаем фотографии если есть
+        const photoFiles = document.getElementById('commentPhotos').files;
+        if (photoFiles.length > 0) {
+            try {
+                const uploadResult = await api.uploadPhotos(photoFiles);
+                commentData.photos = uploadResult.files;
+                console.log('📸 Фотографии загружены:', uploadResult.files);
+            } catch (error) {
+                console.error('Ошибка загрузки фотографий:', error);
+                alert('Ошибка загрузки фотографий: ' + error.message);
+                return;
+            }
+        }
         
         // Добавляем имя только для неавторизованных пользователей (капча отключена)
         if (!auth.isAuthenticated()) {
@@ -453,10 +475,31 @@ function formatRating(rating) {
     return '★'.repeat(stars) + '☆'.repeat(5 - stars);
 }
 
-// Обработка ошибок
-function handleError(error, action) {
-    console.error(`Ошибка ${action}:`, error);
-    alert(`Ошибка ${action}: ${error.message}`);
+// Открытие модального окна с фотографией
+function openPhotoModal(photoUrl) {
+    const modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.innerHTML = `
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Фотография</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="${photoUrl}" class="img-fluid" alt="Фотография">
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
+    
+    modal.addEventListener('hidden.bs.modal', () => {
+        document.body.removeChild(modal);
+    });
 }
 
 // Показ уведомлений
