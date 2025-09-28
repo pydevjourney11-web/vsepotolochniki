@@ -8,6 +8,10 @@ import os
 from datetime import datetime, timedelta
 import json
 
+# Получаем абсолютный путь к корневой директории проекта
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-change-in-production'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -47,26 +51,52 @@ app.register_blueprint(search_bp, url_prefix='/api/search')
 
 @app.route('/')
 def index():
-    return send_from_directory('frontend', 'index.html')
+    try:
+        return send_from_directory(FRONTEND_DIR, 'index.html')
+    except Exception as e:
+        return jsonify({'error': f'Frontend directory not found: {FRONTEND_DIR}', 'exception': str(e)}), 500
 
 @app.route('/js/<path:filename>')
 def serve_js(filename):
-    return send_from_directory('frontend/js', filename)
+    return send_from_directory(os.path.join(FRONTEND_DIR, 'js'), filename)
 
 @app.route('/css/<path:filename>')
 def serve_css(filename):
-    return send_from_directory('frontend/css', filename)
+    return send_from_directory(os.path.join(FRONTEND_DIR, 'css'), filename)
 
 @app.route('/<path:filename>')
 def serve_html(filename):
     # Исключаем API маршруты
     if filename.startswith('api/'):
         return jsonify({'error': 'Not found'}), 404
-    return send_from_directory('frontend', filename)
+    return send_from_directory(FRONTEND_DIR, filename)
+
+@app.route('/test')
+def test():
+    return '''
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Test Page</title>
+    </head>
+    <body>
+        <h1>Test Page Works!</h1>
+        <p>Frontend directory: {}</p>
+        <p>Frontend exists: {}</p>
+        <p><a href="/api/health">Check API Health</a></p>
+    </body>
+    </html>
+    '''.format(FRONTEND_DIR, os.path.exists(FRONTEND_DIR))
 
 @app.route('/api/health')
 def health_check():
-    return jsonify({'status': 'ok', 'message': 'Server is running', 'timestamp': datetime.utcnow().isoformat()})
+    return jsonify({
+        'status': 'ok', 
+        'message': 'Server is running', 
+        'timestamp': datetime.utcnow().isoformat(),
+        'frontend_dir': FRONTEND_DIR,
+        'frontend_exists': os.path.exists(FRONTEND_DIR)
+    })
 
 @app.errorhandler(404)
 def not_found(error):
