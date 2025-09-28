@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 from backend.models import db, Article, Comment, User
 import json
 
@@ -99,7 +99,9 @@ def create_article():
     user_id = None
     anonymous_author = None
     
+    # Проверяем авторизацию через verify_jwt_in_request
     try:
+        verify_jwt_in_request()
         user_id = get_jwt_identity()
         user_id = int(user_id)
         print(f"✅ Пользователь авторизован: {user_id}")
@@ -268,11 +270,15 @@ def create_comment(article_id):
     user_id = None
     anonymous_name = None
     
+    # Проверяем авторизацию через verify_jwt_in_request
     try:
+        verify_jwt_in_request()
         user_id = get_jwt_identity()
         user_id = int(user_id)
+        print(f"✅ Пользователь авторизован для комментария: {user_id}")
         # Пользователь авторизован - пропускаем капчу
-    except:
+    except Exception as e:
+        print(f"❌ Пользователь не авторизован для комментария: {e}")
         # Пользователь не авторизован - анонимный комментарий
         # Проверяем капчу
         captcha_response = data.get('captcha')
