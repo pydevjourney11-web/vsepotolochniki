@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 from backend.models import db, Review, Company, User
 import json
+import requests
 
 reviews_bp = Blueprint('reviews', __name__)
 
@@ -46,7 +47,6 @@ def create_review():
             return jsonify({'error': 'Captcha verification required for anonymous reviews'}), 400
         
         # Проверяем капчу с Google
-        import requests
         captcha_secret = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJZe"  # Тестовый секретный ключ
         captcha_verify_url = "https://www.google.com/recaptcha/api/siteverify"
         
@@ -68,31 +68,48 @@ def create_review():
         anonymous_name = data.get('anonymous_name', 'Анонимный пользователь')
     
     # Создаем отзыв
-    review = Review(
-        company_id=company_id,
-        user_id=user_id,
-        anonymous_name=anonymous_name,
-        rating=rating,
-        text=data.get('text'),
-        photos=json.dumps(data.get('photos', [])),
-        status='approved'  # Автоматически одобряем отзывы
-    )
-    
-    db.session.add(review)
+    try:
+        print(f"🔨 Создаем отзыв: company_id={company_id}, user_id={user_id}, anonymous_name={anonymous_name}, rating={rating}")
+        
+        review = Review(
+            company_id=company_id,
+            user_id=user_id,
+            anonymous_name=anonymous_name,
+            rating=rating,
+            text=data.get('text'),
+            photos=json.dumps(data.get('photos', [])),
+            status='approved'  # Автоматически одобряем отзывы
+        )
+        
+        print(f"✅ Объект Review создан: {review}")
+        db.session.add(review)
+        print("✅ Отзыв добавлен в сессию")
+        
+    except Exception as e:
+        print(f"❌ Ошибка при создании отзыва: {e}")
+        db.session.rollback()
+        return jsonify({'error': f'Failed to create review: {str(e)}'}), 500
     
     # Пересчитываем рейтинг компании
-    all_reviews = Review.query.filter_by(company_id=company_id, status='approved').all()
-    if all_reviews:
-        total_rating = sum(r.rating for r in all_reviews)
-        company.rating = total_rating / len(all_reviews)
-        company.review_count = len(all_reviews)
-    
-    db.session.commit()
-    
-    return jsonify({
-        'message': 'Review created successfully',
-        'review': review.to_dict()
-    }), 201
+    try:
+        all_reviews = Review.query.filter_by(company_id=company_id, status='approved').all()
+        if all_reviews:
+            total_rating = sum(r.rating for r in all_reviews)
+            company.rating = total_rating / len(all_reviews)
+            company.review_count = len(all_reviews)
+        
+        db.session.commit()
+        print("✅ Отзыв сохранен в базу данных")
+        
+        return jsonify({
+            'message': 'Review created successfully',
+            'review': review.to_dict()
+        }), 201
+        
+    except Exception as e:
+        print(f"❌ Ошибка при сохранении отзыва: {e}")
+        db.session.rollback()
+        return jsonify({'error': f'Failed to save review: {str(e)}'}), 500
 
 @reviews_bp.route('/<int:review_id>', methods=['GET'])
 @jwt_required()

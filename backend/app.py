@@ -14,7 +14,8 @@ FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-change-in-production'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+# Поддержка PostgreSQL для продакшена, SQLite для разработки
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///database.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'jwt-secret-string-change-in-production'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
@@ -196,7 +197,9 @@ def uploaded_file(filename):
 def init_db():
     with app.app_context():
         try:
+            print(f"🗄️ Подключение к базе данных: {app.config['SQLALCHEMY_DATABASE_URI']}")
             db.create_all()
+            print("✅ Таблицы базы данных созданы/обновлены")
             
             # Создаем администратора если его нет
             from backend.models import User
@@ -212,9 +215,11 @@ def init_db():
                 db.session.add(admin_user)
                 db.session.commit()
                 print("✅ Администратор создан: admin@test.com / admin123")
+            else:
+                print("ℹ️ Администратор уже существует")
                 
         except Exception as e:
-            print(f"❌ Ошибка инициализации: {e}")
+            print(f"❌ Ошибка инициализации базы данных: {e}")
             pass  # Игнорируем ошибки при инициализации
 
 # Инициализируем базу данных при запуске

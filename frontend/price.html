@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ВП | Все потолочные - Прайс-лист</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-star"></i> ВП | Все потолочные
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="catalog.html">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="forum.html">Форум</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="price.html">Прайс-лист</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav" id="authNav">
+                    <!-- Будет заполнено через JavaScript -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h1 class="mb-0">
+                            <i class="fas fa-calculator text-primary"></i>
+                            Справочный прайс-лист натяжных потолков
+                        </h1>
+                    </div>
+                    <div class="card-body">
+                        <!-- Вводная информация -->
+                        <div class="alert alert-info">
+                            <h4 class="alert-heading">
+                                <i class="fas fa-info-circle"></i> О прайс-листе
+                            </h4>
+                            <p class="mb-2">
+                                Рынок натяжных потолков захлестнула волна непрофессионализма. 
+                                Стереотип "потолки — это просто" привёл к тому, что каждый второй "мастер" 
+                                считает себя специалистом после просмотра 3-4 видео на YouTube.
+                            </p>
+                            <hr>
+                            <p class="mb-2">
+                                На практике ежедневно мы сталкиваемся с ситуациями, когда оправдывают 
+                                грубые нарушения технологии монтажа "низкой ценой". Мы проанализировали 
+                                рынок и разработали справочный прайс-лист, который отражает реальную 
+                                стоимость качественных работ.
+                            </p>
+                            <hr>
+                            <p class="mb-0">
+                                <strong>Важно:</strong> Цены в прайсе — это тот минимум, при котором 
+                                работа может быть выполнена в соответствии с ГОСТами и техническими регламентами.
+                            </p>
+                        </div>
+
+                        <!-- Статистика -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card text-center h-100">
+                                    <div class="card-body">
+                                        <h2 class="text-success mb-3">
+                                            <i class="fas fa-check-circle"></i> &lt;650
+                                        </h2>
+                                        <p class="card-text">
+                                            Экспертами Ассоциации в 2024 году было проведено устранения дефектов
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card text-center h-100">
+                                    <div class="card-body">
+                                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 120px; height: 120px;">
+                                            <div>
+                                                <div class="h3 mb-0">5-7</div>
+                                                <small>каждый день</small>
+                                            </div>
+                                        </div>
+                                        <p class="card-text">
+                                            заявок на переделку
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ссылка на полный прайс -->
+                        <div class="text-center mb-4">
+                            <div class="card border-primary">
+                                <div class="card-body">
+                                    <h4 class="card-title">
+                                        <i class="fas fa-table"></i> Полный прайс-лист
+                                    </h4>
+                                    <p class="card-text">
+                                        Для просмотра детального прайс-листа с актуальными ценами 
+                                        на все виды натяжных потолков и комплектующих
+                                    </p>
+                                    <a href="https://docs.google.com/spreadsheets/d/1n5737cJQm7BmNaImVhHV9vBWuEm1a-KSKFKXPnoS9UI/edit?pli=1&gid=1482972955#gid=1482972955" 
+                                       target="_blank" 
+                                       class="btn btn-primary btn-lg">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        Открыть прайс-лист в Google Sheets
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Краткая информация о ценах -->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-euro-sign"></i> Потолки
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled">
+                                            <li><strong>Минимальный заказ:</strong> 5 000 ₽/м²</li>
+                                            <li><strong>NONAME (Китай):</strong> от 100 ₽/м²</li>
+                                            <li><strong>MSD Standard:</strong> от 125 ₽/м²</li>
+                                            <li><strong>MSD Premium:</strong> от 140 ₽/м²</li>
+                                            <li><strong>BAUF (Германия):</strong> от 145 ₽/м²</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-cog"></i> Профили
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled">
+                                            <li><strong>ПВХ стеновой:</strong> от 25 ₽/м.п.</li>
+                                            <li><strong>Алюминиевый:</strong> от 70 ₽/м.п.</li>
+                                            <li><strong>Парящий:</strong> от 450 ₽/м.п.</li>
+                                            <li><strong>Евробрус:</strong> от 200 ₽/м.п.</li>
+                                            <li><strong>Прищепка:</strong> от 120 ₽/м.п.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-lightbulb"></i> Освещение
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled">
+                                            <li><strong>Точечные светильники:</strong> от 300 ₽</li>
+                                            <li><strong>LED панели:</strong> от 1 500 ₽</li>
+                                            <li><strong>Люстры:</strong> от 2 000 ₽</li>
+                                            <li><strong>Светодиодные ленты:</strong> от 200 ₽/м</li>
+                                            <li><strong>Умное освещение:</strong> от 3 000 ₽</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Дополнительная информация -->
+                        <div class="mt-4">
+                            <div class="alert alert-warning">
+                                <h5 class="alert-heading">
+                                    <i class="fas fa-exclamation-triangle"></i> Важная информация
+                                </h5>
+                                <ul class="mb-0">
+                                    <li>Цены указаны за материалы и работу</li>
+                                    <li>Минимальная площадь заказа - 10 м²</li>
+                                    <li>Стоимость может варьироваться в зависимости от сложности</li>
+                                    <li>Все работы выполняются в соответствии с ГОСТами</li>
+                                    <li>Предоставляется гарантия на все виды работ</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>ВП | Все потолочные</h5>
+                    <p>Профессиональные натяжные потолки с гарантией качества</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2024 Все потолочные. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Обновляем навигацию при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            auth.updateUI();
+        });
+    </script>
+</body>
+</html>

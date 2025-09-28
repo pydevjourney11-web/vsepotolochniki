@@ -218,6 +218,9 @@ function setupReviewForm() {
                 text: text
             };
             
+            console.log('📝 Данные отзыва:', reviewData);
+            console.log('🏢 Текущая компания:', currentCompany);
+            
             // TODO: Загрузка фотографий
             if (photos.length > 0) {
                 reviewData.photos = []; // Пока без фотографий
@@ -239,8 +242,10 @@ function setupReviewForm() {
                 
                 reviewData.captcha = captchaResponse;
                 reviewData.anonymous_name = anonymousName;
+                console.log('🔒 Добавлены данные для анонимного пользователя:', {captcha: captchaResponse, anonymous_name: anonymousName});
             }
             
+            console.log('📤 Отправляем данные:', reviewData);
             await api.createReview(reviewData);
             
             showNotification('Отзыв успешно добавлен!', 'success');
