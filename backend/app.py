@@ -149,6 +149,52 @@ def health_check():
         'admin_exists': admin_exists
     })
 
+@app.route('/api/update-db', methods=['POST'])
+def update_database():
+    """Обновление схемы базы данных для продакшена"""
+    try:
+        from sqlalchemy import text
+        
+        # Проверяем текущий размер поля password
+        result = db.session.execute(text("""
+            SELECT character_maximum_length 
+            FROM information_schema.columns 
+            WHERE table_name = 'user' AND column_name = 'password'
+        """))
+        
+        current_length = result.fetchone()
+        if current_length:
+            print(f"📏 Текущий размер поля password: {current_length[0]} символов")
+            
+            if current_length[0] < 200:
+                print("🔧 Обновляем размер поля password до 200 символов...")
+                
+                # Обновляем размер поля password
+                db.session.execute(text("ALTER TABLE \"user\" ALTER COLUMN password TYPE VARCHAR(200)"))
+                db.session.commit()
+                
+                return jsonify({
+                    'success': True,
+                    'message': 'Поле password успешно обновлено до 200 символов!'
+                })
+            else:
+                return jsonify({
+                    'success': True,
+                    'message': 'Поле password уже имеет достаточный размер'
+                })
+        else:
+            return jsonify({
+                'success': False,
+                'error': 'Таблица user не найдена'
+            }), 404
+            
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'error': f'Ошибка при обновлении базы данных: {str(e)}'
+        }), 500
+
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({'error': 'Not found'}), 404
