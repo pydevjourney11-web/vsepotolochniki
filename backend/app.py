@@ -26,7 +26,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 # Создаем папку для загрузок
 try:
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     print(f"✅ Папка загрузок создана: {app.config['UPLOAD_FOLDER']}")
     print(f"✅ Переменная RENDER: {os.environ.get('RENDER')}")
     print(f"✅ Текущая рабочая директория: {os.getcwd()}")
