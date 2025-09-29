@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import db, Article, Comment, Review, User, Company
+from backend.models import db, Article, Comment, Review, User, Company
 from sqlalchemy import inspect
 from datetime import datetime
 

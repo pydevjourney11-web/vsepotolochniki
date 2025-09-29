@@ -37,7 +37,7 @@ except Exception as e:
     print(f"⚠️ Не удалось создать папку загрузок: {e}")
 
 # Импортируем db из models
-from models import db, User, Company, Review, Article, Comment
+from backend.models import db, User, Company, Review, Article, Comment
 
 # Инициализируем расширения
 db.init_app(app)
@@ -45,12 +45,12 @@ jwt = JWTManager(app)
 CORS(app)  # Разрешаем CORS для всех доменов
 
 # Импортируем роуты
-from routes.auth import auth_bp
-from routes.catalog import catalog_bp
-from routes.forum import forum_bp
-from routes.reviews import reviews_bp
-from routes.moderation import moderation_bp
-from routes.search import search_bp
+from backend.routes.auth import auth_bp
+from backend.routes.catalog import catalog_bp
+from backend.routes.forum import forum_bp
+from backend.routes.reviews import reviews_bp
+from backend.routes.moderation import moderation_bp
+from backend.routes.search import search_bp
 
 # Регистрируем блюпринты
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
@@ -105,7 +105,7 @@ def init_database():
         with app.app_context():
             db.create_all()
             # Проверяем, что таблицы созданы
-            from models import User
+            from backend.models import User
             user_count = User.query.count()
             
             # Создаем админа если его нет
@@ -141,7 +141,7 @@ def health_check():
         db_status = 'connected'
         
         # Проверяем существование админа
-        from models import User
+        from backend.models import User
         admin_user = User.query.filter_by(email='admin@test.com').first()
         admin_exists = admin_user is not None
         
@@ -420,7 +420,7 @@ def init_db():
             print("✅ Таблицы базы данных созданы/обновлены")
             
             # Создаем администратора если его нет
-            from models import User
+            from backend.models import User
             admin_user = User.query.filter_by(email='admin@test.com').first()
             if not admin_user:
                 from werkzeug.security import generate_password_hash
