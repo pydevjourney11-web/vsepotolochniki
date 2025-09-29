@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
-from backend.models import db, Article, Comment, User
+from models import db, Article, Comment, User
 import json
 import requests
 
@@ -8,52 +8,63 @@ forum_bp = Blueprint('forum', __name__)
 
 @forum_bp.route('/articles', methods=['GET'])
 def get_articles():
-    page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
-    tag = request.args.get('tag')
-    search = request.args.get('search')
-    
-    query = Article.query.filter_by(status='approved')
-    
-    if tag:
-        query = query.filter(Article.tags.contains(tag))
-    
-    if search:
-        # Полнотекстовый поиск по заголовку, содержанию, тегам и автору
-        search_term = f"%{search}%"
-        query = query.filter(
-            db.or_(
-                Article.title.ilike(search_term),
-                Article.content.ilike(search_term),
-                Article.tags.ilike(search_term),
-                Article.excerpt.ilike(search_term)
+    try:
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 10, type=int)
+        tag = request.args.get('tag')
+        search = request.args.get('search')
+        author_id = request.args.get('author_id', type=int)
+        
+        query = Article.query.filter_by(status='approved')
+        
+        if author_id:
+            query = query.filter_by(author_id=author_id)
+        
+        if tag:
+            query = query.filter(Article.tags.contains(tag))
+        
+        if search:
+            # Полнотекстовый поиск по заголовку, содержанию, тегам и автору
+            search_term = f"%{search}%"
+            query = query.filter(
+                db.or_(
+                    Article.title.ilike(search_term),
+                    Article.content.ilike(search_term),
+                    Article.tags.ilike(search_term),
+                    Article.excerpt.ilike(search_term)
+                )
             )
+        
+        articles = query.order_by(Article.created_at.desc()).paginate(
+            page=page, per_page=per_page, error_out=False
         )
-    
-    articles = query.order_by(Article.created_at.desc()).paginate(
-        page=page, per_page=per_page, error_out=False
-    )
-    
-    return jsonify({
-        'articles': [{
-            'id': article.id,
-            'title': article.title,
-            'excerpt': article.excerpt,
-            'cover_image': article.cover_image,
-            'tags': json.loads(article.tags) if article.tags else [],
-            'views': article.views,
-            'author': {
-                'id': article.author.id if article.author else None,
-                'name': article.author.name if article.author else article.anonymous_author,
-                'avatar': article.author.avatar if article.author else None
-            },
-            'created_at': article.created_at.isoformat(),
-            'comment_count': len(article.comments)
-        } for article in articles.items],
-        'total': articles.total,
-        'pages': articles.pages,
-        'current_page': page
-    })
+        
+        return jsonify({
+            'articles': [{
+                'id': article.id,
+                'title': article.title,
+                'excerpt': article.excerpt,
+                'cover_image': article.cover_image,
+                'tags': json.loads(article.tags) if article.tags else [],
+                'views': article.views,
+                'author': {
+                    'id': article.author.id if article.author else None,
+                    'name': article.author.name if article.author else article.anonymous_author,
+                    'avatar': article.author.avatar if article.author else None
+                } if article.author_id and article.author else {
+                    'id': None,
+                    'name': article.anonymous_author or 'Анонимный автор',
+                    'avatar': None
+                },
+                'created_at': article.created_at.isoformat(),
+                'comment_count': len(article.comments)
+            } for article in articles.items],
+            'total': articles.total,
+            'pages': articles.pages,
+            'current_page': page
+        })
+    except Exception as e:
+        return jsonify({'error': f'Ошибка загрузки статей: {str(e)}'}), 500
 
 @forum_bp.route('/articles/<int:article_id>', methods=['GET'])
 def get_article(article_id):

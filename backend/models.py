@@ -82,10 +82,10 @@ class Review(db.Model):
             'photos': json.loads(self.photos) if self.photos else [],
             'created_at': self.created_at.isoformat(),
             'author': {
-                'id': self.author.id if self.author else None,
-                'name': self.author.name if self.author else self.anonymous_name,
-                'avatar': self.author.avatar if self.author else None
-            } if self.author else {
+                'id': self.author.id,
+                'name': self.author.name,
+                'avatar': self.author.avatar
+            } if self.user_id and self.author else {
                 'id': None,
                 'name': self.anonymous_name or 'Анонимный пользователь',
                 'avatar': None
@@ -122,10 +122,10 @@ class Article(db.Model):
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat(),
             'author': {
-                'id': self.author.id if self.author else None,
-                'name': self.author.name if self.author else self.anonymous_author,
-                'avatar': self.author.avatar if self.author else None
-            } if self.author else {
+                'id': self.author.id,
+                'name': self.author.name,
+                'avatar': self.author.avatar
+            } if self.author_id and self.author else {
                 'id': None,
                 'name': self.anonymous_author or 'Анонимный автор',
                 'avatar': None

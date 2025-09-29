@@ -103,6 +103,9 @@ function displayPendingArticles(articles) {
                             <button class="btn btn-danger btn-sm" onclick="moderateArticle(${article.id}, 'rejected')">
                                 <i class="fas fa-times"></i> Отклонить
                             </button>
+                            <button class="btn btn-dark btn-sm" onclick="deleteArticle(${article.id})" title="Удалить навсегда">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -136,6 +139,7 @@ async function loadPendingCompanies() {
                         <button class="btn btn-success btn-sm" onclick="moderateCompany(${c.id}, 'approved')"><i class="fas fa-check"></i></button>
                         <button class="btn btn-warning btn-sm" onclick="moderateCompany(${c.id}, 'pending')"><i class="fas fa-clock"></i></button>
                         <button class="btn btn-danger btn-sm" onclick="moderateCompany(${c.id}, 'rejected')"><i class="fas fa-times"></i></button>
+                        <button class="btn btn-dark btn-sm" onclick="deleteCompany(${c.id})" title="Удалить навсегда"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
             </div>
@@ -291,6 +295,63 @@ function formatDate(dateString) {
 function handleError(error, action) {
     console.error(`Ошибка ${action}:`, error);
     alert(`Ошибка ${action}: ${error.message}`);
+}
+
+// Функции удаления (только для админов)
+async function deleteArticle(articleId) {
+    if (!confirm('Вы уверены, что хотите удалить эту статью? Это действие нельзя отменить.')) {
+        return;
+    }
+    
+    try {
+        await api.deleteArticle(articleId);
+        showNotification('Статья успешно удалена', 'success');
+        loadPendingArticles();
+    } catch (error) {
+        handleError(error, 'удаления статьи');
+    }
+}
+
+async function deleteComment(commentId) {
+    if (!confirm('Вы уверены, что хотите удалить этот комментарий? Это действие нельзя отменить.')) {
+        return;
+    }
+    
+    try {
+        await api.deleteComment(commentId);
+        showNotification('Комментарий успешно удален', 'success');
+        loadPendingComments();
+    } catch (error) {
+        handleError(error, 'удаления комментария');
+    }
+}
+
+async function deleteReview(reviewId) {
+    if (!confirm('Вы уверены, что хотите удалить этот отзыв? Это действие нельзя отменить.')) {
+        return;
+    }
+    
+    try {
+        await api.deleteReview(reviewId);
+        showNotification('Отзыв успешно удален', 'success');
+        loadPendingReviews();
+    } catch (error) {
+        handleError(error, 'удаления отзыва');
+    }
+}
+
+async function deleteCompany(companyId) {
+    if (!confirm('Вы уверены, что хотите удалить эту компанию? Это действие нельзя отменить.')) {
+        return;
+    }
+    
+    try {
+        await api.deleteCompany(companyId);
+        showNotification('Компания успешно удалена', 'success');
+        loadPendingCompanies();
+    } catch (error) {
+        handleError(error, 'удаления компании');
+    }
 }
 
 // Показ уведомлений

@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from backend.models import db, Company, Article, Review
+from models import db, Company, Article, Review
 from sqlalchemy import or_, and_
 
 search_bp = Blueprint('search', __name__, url_prefix='/search')

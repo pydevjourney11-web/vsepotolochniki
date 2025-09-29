@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify, send_from_directory
-from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -13,11 +12,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your-secret-key-change-in-production'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
 # Поддержка PostgreSQL для продакшена, SQLite для разработки
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///database.db')
+database_url = os.environ.get('DATABASE_URL', 'sqlite:///database.db')
+if database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = 'jwt-secret-string-change-in-production'
+app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'jwt-secret-string-change-in-production')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 # Определяем папку для загрузок - всегда используем папку в проекте
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
@@ -35,21 +37,20 @@ except Exception as e:
     print(f"⚠️ Не удалось создать папку загрузок: {e}")
 
 # Импортируем db из models
-from backend.models import db, User, Company, Review, Article, Comment
+from models import db, User, Company, Review, Article, Comment
 
 # Инициализируем расширения
 db.init_app(app)
-migrate = Migrate(app, db)
 jwt = JWTManager(app)
 CORS(app)  # Разрешаем CORS для всех доменов
 
 # Импортируем роуты
-from backend.routes.auth import auth_bp
-from backend.routes.catalog import catalog_bp
-from backend.routes.forum import forum_bp
-from backend.routes.reviews import reviews_bp
-from backend.routes.moderation import moderation_bp
-from backend.routes.search import search_bp
+from routes.auth import auth_bp
+from routes.catalog import catalog_bp
+from routes.forum import forum_bp
+from routes.reviews import reviews_bp
+from routes.moderation import moderation_bp
+from routes.search import search_bp
 
 # Регистрируем блюпринты
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
@@ -104,7 +105,7 @@ def init_database():
         with app.app_context():
             db.create_all()
             # Проверяем, что таблицы созданы
-            from backend.models import User
+            from models import User
             user_count = User.query.count()
             
             # Создаем админа если его нет
@@ -140,7 +141,7 @@ def health_check():
         db_status = 'connected'
         
         # Проверяем существование админа
-        from backend.models import User
+        from models import User
         admin_user = User.query.filter_by(email='admin@test.com').first()
         admin_exists = admin_user is not None
         
@@ -318,7 +319,7 @@ def uploaded_file_alt(filename):
         print(f"📁 Файл существует: {os.path.exists(file_path)}")
         
         if os.path.exists(file_path):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+            return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
         else:
             print(f"❌ Файл не найден: {file_path}")
             return jsonify({'error': 'File not found'}), 404
@@ -415,11 +416,11 @@ def init_db():
     with app.app_context():
         try:
             print(f"🗄️ Подключение к базе данных: {app.config['SQLALCHEMY_DATABASE_URI']}")
-        db.create_all()
+            db.create_all()
             print("✅ Таблицы базы данных созданы/обновлены")
             
             # Создаем администратора если его нет
-            from backend.models import User
+            from models import User
             admin_user = User.query.filter_by(email='admin@test.com').first()
             if not admin_user:
                 from werkzeug.security import generate_password_hash

@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from backend.models import db, Article, Comment, Review, User, Company
+from models import db, Article, Comment, Review, User, Company
 from sqlalchemy import inspect
 from datetime import datetime
 
@@ -210,3 +210,104 @@ def moderate_company(company_id):
         'name': company.name,
         'status': company.status
     }})
+
+# Удаление статьи (только для админов)
+@moderation_bp.route('/articles/<int:article_id>', methods=['DELETE'])
+@jwt_required()
+def delete_article(article_id):
+    admin_check = require_admin()
+    if admin_check:
+        return admin_check
+    
+    try:
+        article = Article.query.get_or_404(article_id)
+        article_title = article.title
+        
+        # Удаляем все комментарии к статье
+        Comment.query.filter_by(article_id=article_id).delete()
+        
+        # Удаляем саму статью
+        db.session.delete(article)
+        db.session.commit()
+        
+        return jsonify({
+            'message': f'Статья "{article_title}" и все её комментарии успешно удалены'
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Ошибка при удалении статьи: {str(e)}'}), 500
+
+# Удаление комментария (только для админов)
+@moderation_bp.route('/comments/<int:comment_id>', methods=['DELETE'])
+@jwt_required()
+def delete_comment(comment_id):
+    admin_check = require_admin()
+    if admin_check:
+        return admin_check
+    
+    try:
+        comment = Comment.query.get_or_404(comment_id)
+        comment_text = comment.text[:50] + "..." if len(comment.text) > 50 else comment.text
+        
+        db.session.delete(comment)
+        db.session.commit()
+        
+        return jsonify({
+            'message': f'Комментарий "{comment_text}" успешно удален'
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Ошибка при удалении комментария: {str(e)}'}), 500
+
+# Удаление отзыва (только для админов)
+@moderation_bp.route('/reviews/<int:review_id>', methods=['DELETE'])
+@jwt_required()
+def delete_review(review_id):
+    admin_check = require_admin()
+    if admin_check:
+        return admin_check
+    
+    try:
+        review = Review.query.get_or_404(review_id)
+        company = Company.query.get(review.company_id)
+        company_name = company.name if company else "Неизвестная компания"
+        
+        db.session.delete(review)
+        db.session.commit()
+        
+        return jsonify({
+            'message': f'Отзыв для компании "{company_name}" успешно удален'
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Ошибка при удалении отзыва: {str(e)}'}), 500
+
+# Удаление компании (только для админов)
+@moderation_bp.route('/companies/<int:company_id>', methods=['DELETE'])
+@jwt_required()
+def delete_company(company_id):
+    admin_check = require_admin()
+    if admin_check:
+        return admin_check
+    
+    try:
+        company = Company.query.get_or_404(company_id)
+        company_name = company.name
+        
+        # Удаляем все отзывы компании
+        Review.query.filter_by(company_id=company_id).delete()
+        
+        # Удаляем саму компанию
+        db.session.delete(company)
+        db.session.commit()
+        
+        return jsonify({
+            'message': f'Компания "{company_name}" и все её отзывы успешно удалены'
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Ошибка при удалении компании: {str(e)}'}), 500

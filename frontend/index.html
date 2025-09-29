@@ -82,15 +82,18 @@
                         <h1 class="display-4 fw-bold mb-3">ВП | Все потолочные</h1>
                         <h2 class="h3 mb-4">Ассоциация монтажников натяжных потолков</h2>
                         <p class="lead mb-4">
-                            Платформа для честного взаимодействия между заказчиками и исполнителями. 
-                            Мы обеспечиваем прозрачность рынка, защиту потребителей и профессиональное сообщество.
+                            Единственная в России профессиональная ассоциация, объединяющая проверенных мастеров 
+                            и защищающая права потребителей. Мы боремся с некачественным монтажом и завышенными ценами.
                         </p>
-                        <div class="d-flex gap-3">
+                        <div class="d-flex flex-column flex-md-row gap-3">
                             <a href="catalog.html" class="btn btn-light btn-lg px-4">
                                 <i class="fas fa-search me-2"></i>Найти исполнителя
                             </a>
                             <a href="forum.html" class="btn btn-outline-light btn-lg px-4">
                                 <i class="fas fa-comments me-2"></i>Форум
+                            </a>
+                            <a href="price.html" class="btn btn-outline-light btn-lg px-4">
+                                <i class="fas fa-calculator me-2"></i>Прайс-лист
                             </a>
                         </div>
                     </div>
@@ -101,31 +104,35 @@
             <div class="row mt-5">
                 <div class="col-lg-4">
                     <div class="red-card p-4 mb-4">
-                        <h4 class="mb-3">ЧЕСТНАЯ ЦЕНА</h4>
+                        <h4 class="mb-3">
+                            <i class="fas fa-shield-alt me-2"></i>ЗАЩИТА ПОТРЕБИТЕЛЕЙ
+                        </h4>
                         <div class="d-flex align-items-center mb-3">
                             <div class="bg-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                <i class="fas fa-check text-danger"></i>
+                                <i class="fas fa-tools text-danger"></i>
                             </div>
                             <span>Организация переделок при некачественном монтаже</span>
                         </div>
                         <div class="d-flex align-items-center mb-3">
                             <div class="bg-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                <i class="fas fa-check text-danger"></i>
+                                <i class="fas fa-ruble-sign text-danger"></i>
                             </div>
-                            <span>Честные цены и стандарты</span>
+                            <span>Честные цены и прозрачные сметы</span>
                         </div>
                         <div class="d-flex align-items-center">
                             <div class="bg-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                <i class="fas fa-check text-danger"></i>
+                                <i class="fas fa-user-check text-danger"></i>
                             </div>
-                            <span>Проверенные специалисты</span>
+                            <span>Проверенные специалисты с гарантией</span>
                         </div>
                     </div>
                 </div>
                 
                 <div class="col-lg-8">
                     <div class="red-card-dark p-4">
-                        <h4 class="mb-4">Прозрачность рынка, защита потребителей</h4>
+                        <h4 class="mb-4">
+                            <i class="fas fa-gavel me-2"></i>Прозрачность рынка, защита потребителей
+                        </h4>
                         
                         <div class="row">
                             <div class="col-md-4 mb-4">
@@ -171,35 +178,421 @@
         </div>
     </section>
 
-    <!-- Поиск -->
-    <section class="search-section py-5 bg-light">
+    <!-- Прайс-лист -->
+    <section class="price-section py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-10">
-                    <div class="card shadow">
-                        <div class="card-body p-4">
-                            <h3 class="text-center mb-4">Поиск исполнителей</h3>
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-5">
+                                <h2 class="text-danger mb-3">
+                                    <i class="fas fa-calculator me-3"></i>Справочный прайс-лист
+                                </h2>
+                                <p class="lead text-muted">
+                                    Честные цены на натяжные потолки от профессиональной ассоциации
+                                </p>
+                            </div>
+                            
+                            <!-- Статистика -->
+                            <div class="row mb-5">
+                                <div class="col-md-6">
+                                    <div class="card text-center h-100 border-danger">
+                                        <div class="card-body">
+                                            <h2 class="text-success mb-3">
+                                                <i class="fas fa-check-circle"></i> &lt;650
+                                            </h2>
+                                            <p class="card-text">
+                                                Экспертами Ассоциации в 2024 году было проведено устранений дефектов
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card text-center h-100 border-danger">
+                                        <div class="card-body">
+                                            <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 120px; height: 120px;">
+                                                <div>
+                                                    <div class="h3 mb-0">5-7</div>
+                                                    <small>каждый день</small>
+                                                </div>
+                                            </div>
+                                            <p class="card-text">
+                                                заявок на переделку
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Краткие цены -->
+                            <div class="row mb-5">
+                                <div class="col-md-4">
+                                    <div class="card h-100 border-danger">
+                                        <div class="card-header bg-danger text-white">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-euro-sign me-2"></i>Потолки
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul class="list-unstyled">
+                                                <li class="mb-2"><strong>Минимальный заказ:</strong> 5 000 ₽/м²</li>
+                                                <li class="mb-2"><strong>NONAME (Китай):</strong> от 100 ₽/м²</li>
+                                                <li class="mb-2"><strong>MSD Standard:</strong> от 125 ₽/м²</li>
+                                                <li class="mb-2"><strong>MSD Premium:</strong> от 140 ₽/м²</li>
+                                                <li><strong>BAUF (Германия):</strong> от 145 ₽/м²</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100 border-danger">
+                                        <div class="card-header bg-danger text-white">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-cog me-2"></i>Профили
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul class="list-unstyled">
+                                                <li class="mb-2"><strong>ПВХ стеновой:</strong> от 25 ₽/м.п.</li>
+                                                <li class="mb-2"><strong>Алюминиевый:</strong> от 70 ₽/м.п.</li>
+                                                <li class="mb-2"><strong>Парящий:</strong> от 450 ₽/м.п.</li>
+                                                <li class="mb-2"><strong>Евробрус:</strong> от 200 ₽/м.п.</li>
+                                                <li><strong>Прищепка:</strong> от 120 ₽/м.п.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100 border-danger">
+                                        <div class="card-header bg-danger text-white">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-lightbulb me-2"></i>Освещение
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul class="list-unstyled">
+                                                <li class="mb-2"><strong>Точечные светильники:</strong> от 300 ₽</li>
+                                                <li class="mb-2"><strong>LED панели:</strong> от 1 500 ₽</li>
+                                                <li class="mb-2"><strong>Люстры:</strong> от 2 000 ₽</li>
+                                                <li class="mb-2"><strong>Светодиодные ленты:</strong> от 200 ₽/м</li>
+                                                <li><strong>Умное освещение:</strong> от 3 000 ₽</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Ссылка на полный прайс -->
+                            <div class="text-center">
+                                <div class="alert alert-danger">
+                                    <h4 class="alert-heading">
+                                        <i class="fas fa-exclamation-triangle"></i> Важно!
+                                    </h4>
+                                    <p class="mb-3">
+                                        Цены в прайсе — это тот минимум, при котором работа может быть выполнена 
+                                        в соответствии с ГОСТами и техническими регламентами.
+                                    </p>
+                                    <a href="https://docs.google.com/spreadsheets/d/1n5737cJQm7BmNaImVhHV9vBWuEm1a-KSKFKXPnoS9UI/edit?pli=1&gid=1482972955#gid=1482972955" 
+                                       target="_blank" 
+                                       class="btn btn-danger btn-lg">
+                                        <i class="fas fa-external-link-alt me-2"></i>
+                                        Открыть полный прайс-лист
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- С какими проблемами мы помогаем -->
+    <section class="problems-section py-5" style="background: var(--red-gradient);">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="text-white mb-3">
+                    <i class="fas fa-question-circle me-3"></i>С какими проблемами мы помогаем?
+                </h2>
+                <p class="lead text-white-50">
+                    Ассоциация решает самые распространенные проблемы в сфере натяжных потолков
+                </p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 text-center border-light bg-white bg-opacity-10">
+                        <div class="card-body text-white">
+                            <div class="mb-3">
+                                <i class="fas fa-tools fa-3x text-warning"></i>
+                            </div>
+                            <h5 class="card-title">Некачественный монтаж</h5>
+                            <p class="card-text">
+                                Помогаем решить проблемы с браком, переделками и компенсацией ущерба 
+                                от недобросовестных исполнителей. Организуем переделки за счет виновника.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 text-center border-light bg-white bg-opacity-10">
+                        <div class="card-body text-white">
+                            <div class="mb-3">
+                                <i class="fas fa-ruble-sign fa-3x text-success"></i>
+                            </div>
+                            <h5 class="card-title">Завышенные цены</h5>
+                            <p class="card-text">
+                                Борьба с завышенными ценами и скрытыми доплатами. 
+                                Прозрачное ценообразование и честные сметы от проверенных мастеров.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 text-center border-light bg-white bg-opacity-10">
+                        <div class="card-body text-white">
+                            <div class="mb-3">
+                                <i class="fas fa-search fa-3x text-info"></i>
+                            </div>
+                            <h5 class="card-title">Поиск исполнителей</h5>
+                            <p class="card-text">
+                                Находим проверенных специалистов с реальными отзывами и рейтингами 
+                                для качественного выполнения работ по справедливым ценам.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 text-center border-light bg-white bg-opacity-10">
+                        <div class="card-body text-white">
+                            <div class="mb-3">
+                                <i class="fas fa-shield-alt fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Защита прав</h5>
+                            <p class="card-text">
+                                Правовая поддержка в спорах с исполнителями, помощь в составлении 
+                                претензий и обращений в контролирующие органы.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 text-center border-light bg-white bg-opacity-10">
+                        <div class="card-body text-white">
+                            <div class="mb-3">
+                                <i class="fas fa-handshake fa-3x text-warning"></i>
+                            </div>
+                            <h5 class="card-title">Медиация споров</h5>
+                            <p class="card-text">
+                                Помогаем найти компромисс между заказчиком и исполнителем, 
+                                избежать судебных разбирательств и решить конфликт мирно.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 text-center border-light bg-white bg-opacity-10">
+                        <div class="card-body text-white">
+                            <div class="mb-3">
+                                <i class="fas fa-graduation-cap fa-3x text-danger"></i>
+                            </div>
+                            <h5 class="card-title">Обучение мастеров</h5>
+                            <p class="card-text">
+                                Повышение квалификации мастеров, обучение правильным технологиям 
+                                монтажа и стандартам качества в сфере натяжных потолков.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="forum.html" class="btn btn-light btn-lg px-5">
+                    <i class="fas fa-comments me-2"></i>
+                    Получить помощь на форуме
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Распространенные ошибки в потолках -->
+    <section class="errors-section py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="text-danger mb-3">
+                    <i class="fas fa-exclamation-triangle me-3"></i>Распространенные ошибки в потолках
+                </h2>
+                <p class="lead text-muted">
+                    Примеры некачественных работ и как их избежать
+                </p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100 border-danger">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-times-circle me-2"></i>Неправильный монтаж профилей
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <img src="https://via.placeholder.com/300x200/ff6b6b/ffffff?text=Плохой+монтаж" 
+                                     class="img-fluid rounded" alt="Неправильный монтаж профилей">
+                            </div>
+                            <h6 class="text-danger">Проблемы:</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-times text-danger me-2"></i>Профили установлены неровно</li>
+                                <li><i class="fas fa-times text-danger me-2"></i>Недостаточное крепление к стене</li>
+                                <li><i class="fas fa-times text-danger me-2"></i>Неправильные зазоры</li>
+                            </ul>
+                            <h6 class="text-success">Правильно:</h6>
+                            <p class="small">Профили должны быть установлены строго по уровню с шагом крепления не более 40 см.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100 border-danger">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-times-circle me-2"></i>Неправильная установка светильников
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <img src="https://via.placeholder.com/300x200/ff6b6b/ffffff?text=Плохое+освещение" 
+                                     class="img-fluid rounded" alt="Неправильная установка светильников">
+                            </div>
+                            <h6 class="text-danger">Проблемы:</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-times text-danger me-2"></i>Светильники установлены криво</li>
+                                <li><i class="fas fa-times text-danger me-2"></i>Неправильные размеры отверстий</li>
+                                <li><i class="fas fa-times text-danger me-2"></i>Отсутствует термокольцо</li>
+                            </ul>
+                            <h6 class="text-success">Правильно:</h6>
+                            <p class="small">Отверстия должны быть точно по размеру светильника с обязательным термокольцом.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100 border-danger">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-times-circle me-2"></i>Неправильное натяжение полотна
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <img src="https://via.placeholder.com/300x200/ff6b6b/ffffff?text=Слабое+натяжение" 
+                                     class="img-fluid rounded" alt="Неправильное натяжение полотна">
+                            </div>
+                            <h6 class="text-danger">Проблемы:</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-times text-danger me-2"></i>Полотно провисает</li>
+                                <li><i class="fas fa-times text-danger me-2"></i>Волны и складки</li>
+                                <li><i class="fas fa-times text-danger me-2"></i>Неправильная температура нагрева</li>
+                            </ul>
+                            <h6 class="text-success">Правильно:</h6>
+                            <p class="small">Полотно должно быть натянуто равномерно без провисаний и складок.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100 border-danger">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-times-circle me-2"></i>Неправильная обработка швов
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <img src="https://via.placeholder.com/300x200/ff6b6b/ffffff?text=Плохие+швы" 
+                                     class="img-fluid rounded" alt="Неправильная обработка швов">
+                            </div>
+                            <h6 class="text-danger">Проблемы:</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-times text-danger me-2"></i>Швы видны невооруженным глазом</li>
+                                <li><i class="fas fa-times text-danger me-2"></i>Неправильная сварка</li>
+                                <li><i class="fas fa-times text-danger me-2"></i>Разные оттенки полотна</li>
+                            </ul>
+                            <h6 class="text-success">Правильно:</h6>
+                            <p class="small">Швы должны быть практически незаметны при правильной сварке и подборе полотна.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <div class="alert alert-warning">
+                    <h5 class="alert-heading">
+                        <i class="fas fa-info-circle"></i> Как избежать ошибок?
+                    </h5>
+                    <p class="mb-3">
+                        Выбирайте только проверенных мастеров из нашей ассоциации. 
+                        Все наши специалисты проходят строгий отбор и обучение.
+                    </p>
+                    <a href="catalog.html" class="btn btn-warning btn-lg">
+                        <i class="fas fa-search me-2"></i>
+                        Найти проверенного мастера
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Поиск исполнителей -->
+    <section class="search-section py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="text-danger mb-3">
+                    <i class="fas fa-search me-3"></i>Поиск исполнителей
+                </h2>
+                <p class="lead text-muted">
+                    Найдите проверенных мастеров по натяжным потолкам в вашем городе
+                </p>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body p-5">
                             <form id="searchForm">
-                                <div class="row g-3 mb-3">
+                                <div class="row g-3 mb-4">
                                     <div class="col-md-4">
-                                        <label class="form-label">Что ищете?</label>
-                                        <input type="text" class="form-control" id="searchQuery" placeholder="Например: монтаж потолков, ремонт">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-tools me-2 text-danger"></i>Что ищете?
+                                        </label>
+                                        <input type="text" class="form-control form-control-lg" id="searchQuery" 
+                                               placeholder="Например: монтаж потолков, ремонт">
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label">Категория</label>
-                                        <select class="form-select" id="categorySelect">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-tags me-2 text-danger"></i>Категория
+                                        </label>
+                                        <select class="form-select form-select-lg" id="categorySelect">
                                             <option value="">Все категории</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label">Город</label>
-                                        <select class="form-select" id="citySelect">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-map-marker-alt me-2 text-danger"></i>Город
+                                        </label>
+                                        <select class="form-select form-select-lg" id="citySelect">
                                             <option value="">Все города</option>
                                         </select>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="form-label">&nbsp;</label>
-                                        <button type="submit" class="btn btn-primary w-100">
+                                        <button type="submit" class="btn btn-danger btn-lg w-100">
                                             <i class="fas fa-search"></i> Найти
                                         </button>
                                     </div>
@@ -208,7 +601,9 @@
                                 <!-- Дополнительные фильтры -->
                                 <div class="row g-3">
                                     <div class="col-md-3">
-                                        <label class="form-label">Рейтинг от</label>
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-star me-2 text-warning"></i>Рейтинг от
+                                        </label>
                                         <select class="form-select" id="ratingSelect">
                                             <option value="">Любой</option>
                                             <option value="4">4+ звезд</option>
@@ -217,7 +612,9 @@
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label">Цена</label>
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-ruble-sign me-2 text-success"></i>Цена
+                                        </label>
                                         <select class="form-select" id="priceSelect">
                                             <option value="">Любая</option>
                                             <option value="budget">Бюджетная</option>
@@ -226,7 +623,9 @@
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label">Опыт работы</label>
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-briefcase me-2 text-info"></i>Опыт работы
+                                        </label>
                                         <select class="form-select" id="experienceSelect">
                                             <option value="">Любой</option>
                                             <option value="5+">5+ лет</option>
@@ -242,6 +641,31 @@
                                     </div>
                                 </div>
                             </form>
+                            
+                            <!-- Преимущества -->
+                            <div class="row mt-5">
+                                <div class="col-md-4 text-center">
+                                    <div class="mb-3">
+                                        <i class="fas fa-shield-alt fa-2x text-danger"></i>
+                                    </div>
+                                    <h6>Проверенные мастера</h6>
+                                    <p class="small text-muted">Все исполнители проходят строгий отбор</p>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <div class="mb-3">
+                                        <i class="fas fa-star fa-2x text-warning"></i>
+                                    </div>
+                                    <h6>Реальные отзывы</h6>
+                                    <p class="small text-muted">Только честные отзывы от клиентов</p>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <div class="mb-3">
+                                        <i class="fas fa-handshake fa-2x text-success"></i>
+                                    </div>
+                                    <h6>Гарантия качества</h6>
+                                    <p class="small text-muted">Защита от некачественных работ</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -317,27 +741,31 @@
     </section>
 
     <!-- Последние статьи и обсуждения -->
-    <section class="articles-section py-5">
+    <section class="articles-section py-5" style="background: var(--red-gradient);">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Последние статьи и обсуждения</h2>
-                <a href="forum.html" class="btn btn-outline-primary">Все статьи</a>
+            <div class="text-center mb-5">
+                <h2 class="text-white mb-3">
+                    <i class="fas fa-newspaper me-3"></i>Последние статьи и обсуждения
+                </h2>
+                <p class="lead text-white-50">
+                    Актуальные новости, советы экспертов и обсуждения в сообществе
+                </p>
             </div>
             
             <!-- Вкладки -->
-            <ul class="nav nav-tabs mb-4" id="articlesTabs" role="tablist">
+            <ul class="nav nav-pills nav-fill mb-4" id="articlesTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="articles-tab" data-bs-toggle="tab" data-bs-target="#articles" type="button" role="tab">
+                    <button class="nav-link active bg-white text-danger" id="articles-tab" data-bs-toggle="tab" data-bs-target="#articles" type="button" role="tab">
                         <i class="fas fa-newspaper me-2"></i>Статьи
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="discussions-tab" data-bs-toggle="tab" data-bs-target="#discussions" type="button" role="tab">
+                    <button class="nav-link bg-white text-danger" id="discussions-tab" data-bs-toggle="tab" data-bs-target="#discussions" type="button" role="tab">
                         <i class="fas fa-comments me-2"></i>Обсуждения
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
+                    <button class="nav-link bg-white text-danger" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
                         <i class="fas fa-star me-2"></i>Отзывы
                     </button>
                 </li>
@@ -358,6 +786,111 @@
                 <div class="tab-pane fade" id="reviews" role="tabpanel">
                     <div class="row" id="latestReviews">
                         <!-- Отзывы загружаются через JS -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="forum.html" class="btn btn-light btn-lg px-5">
+                    <i class="fas fa-arrow-right me-2"></i>
+                    Все статьи и обсуждения
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Присоединиться к ассоциации -->
+    <section class="join-section py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body p-5 text-center">
+                            <div class="mb-4">
+                                <i class="fas fa-users fa-4x text-danger mb-3"></i>
+                                <h2 class="text-danger mb-3">Присоединиться к ассоциации</h2>
+                                <p class="lead text-muted">
+                                    Станьте частью профессионального сообщества мастеров по натяжным потолкам
+                                </p>
+                            </div>
+                            
+                            <div class="row mb-5">
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-danger">
+                                        <div class="card-body">
+                                            <i class="fas fa-certificate fa-2x text-danger mb-3"></i>
+                                            <h5>Сертификация</h5>
+                                            <p class="small">Получите официальный сертификат мастера</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-danger">
+                                        <div class="card-body">
+                                            <i class="fas fa-graduation-cap fa-2x text-danger mb-3"></i>
+                                            <h5>Обучение</h5>
+                                            <p class="small">Повышение квалификации и новые технологии</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-danger">
+                                        <div class="card-body">
+                                            <i class="fas fa-handshake fa-2x text-danger mb-3"></i>
+                                            <h5>Поддержка</h5>
+                                            <p class="small">Помощь в решении сложных вопросов</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-5">
+                                <div class="col-md-6">
+                                    <h5 class="text-danger mb-3">
+                                        <i class="fas fa-check-circle me-2"></i>Преимущества для мастеров
+                                    </h5>
+                                    <ul class="list-unstyled text-start">
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Официальный статус в ассоциации</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Доступ к базе проверенных клиентов</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Защита от недобросовестных заказчиков</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Скидки на материалы и инструменты</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Страхование профессиональной ответственности</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="text-danger mb-3">
+                                        <i class="fas fa-shield-alt me-2"></i>Требования к кандидатам
+                                    </h5>
+                                    <ul class="list-unstyled text-start">
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Опыт работы от 2 лет</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Портфолио выполненных работ</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Отсутствие жалоб от клиентов</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Готовность к обучению и развитию</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Соблюдение стандартов качества</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-danger">
+                                <h5 class="alert-heading">
+                                    <i class="fas fa-info-circle"></i> Как вступить в ассоциацию?
+                                </h5>
+                                <p class="mb-3">
+                                    Подайте заявку на вступление, пройдите собеседование и тестирование. 
+                                    После успешного прохождения вы получите все преимущества членства.
+                                </p>
+                                <div class="d-flex flex-column flex-md-row gap-3 justify-content-center">
+                                    <a href="register.html" class="btn btn-danger btn-lg">
+                                        <i class="fas fa-user-plus me-2"></i>
+                                        Подать заявку
+                                    </a>
+                                    <a href="forum.html" class="btn btn-outline-danger btn-lg">
+                                        <i class="fas fa-comments me-2"></i>
+                                        Задать вопрос
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

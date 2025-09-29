@@ -163,9 +163,16 @@ function displayArticles(articles) {
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="btn btn-primary btn-sm w-100" onclick="viewArticle(${article.id})">
-                        Читать статью
-                    </button>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary btn-sm flex-grow-1" onclick="viewArticle(${article.id})">
+                            Читать статью
+                        </button>
+                        ${auth.isAdmin() ? `
+                            <button class="btn btn-outline-danger btn-sm" onclick="deleteArticleFromForum(${article.id})" title="Удалить статью">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        ` : ''}
+                    </div>
                 </div>
             </div>
         </div>
@@ -286,11 +293,13 @@ function showArticleModal(article) {
                                     <strong class="comment-author">${comment.author.name}</strong>
                                     <small class="comment-date ms-2">${formatDate(comment.created_at)}</small>
                                 </div>
-                                ${auth.isOwner(comment.author.id) ? `
+                                ${auth.isOwner(comment.author.id) || auth.isAdmin() ? `
                                     <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-outline-primary" onclick="editComment(${comment.id})">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
+                                        ${auth.isOwner(comment.author.id) ? `
+                                            <button class="btn btn-outline-primary" onclick="editComment(${comment.id})">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        ` : ''}
                                         <button class="btn btn-outline-danger" onclick="deleteComment(${comment.id})">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -590,6 +599,21 @@ function removePhotoPreview(index) {
     
     // Перезапускаем событие change для обновления предварительного просмотра
     photoInput.dispatchEvent(new Event('change'));
+}
+
+// Удаление статьи из форума (только для админов)
+async function deleteArticleFromForum(articleId) {
+    if (!confirm('Вы уверены, что хотите удалить эту статью? Это действие нельзя отменить.')) {
+        return;
+    }
+    
+    try {
+        await api.deleteArticle(articleId);
+        showNotification('Статья успешно удалена', 'success');
+        loadArticles(); // Перезагружаем список статей
+    } catch (error) {
+        handleError(error, 'удаления статьи');
+    }
 }
 
 // Инициализация при загрузке страницы

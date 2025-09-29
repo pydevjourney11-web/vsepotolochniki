@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from backend.models import db, Company, User, Review
+from models import db, Company, User, Review
 import json
 
 catalog_bp = Blueprint('catalog', __name__)
@@ -71,30 +71,33 @@ def get_companies():
 
 @catalog_bp.route('/<int:company_id>', methods=['GET'])
 def get_company(company_id):
-    company = Company.query.get_or_404(company_id)
-    
-    # Получаем отзывы
-    reviews = Review.query.filter_by(company_id=company_id, status='approved').order_by(Review.created_at.desc()).limit(10).all()
-    
-    return jsonify({
-        'id': company.id,
-        'name': company.name,
-        'category': company.category,
-        'city': company.city,
-        'address': company.address,
-        'phone': company.phone,
-        'website': company.website,
-        'description': company.description,
-        'logo': company.logo,
-        'rating': company.rating,
-        'review_count': company.review_count,
-        'owner': {
-            'id': company.owner.id,
-            'name': company.owner.name
-        },
-        'reviews': [review.to_dict() for review in reviews],
-        'created_at': company.created_at.isoformat()
-    })
+    try:
+        company = Company.query.get_or_404(company_id)
+        
+        # Получаем отзывы
+        reviews = Review.query.filter_by(company_id=company_id, status='approved').order_by(Review.created_at.desc()).limit(10).all()
+        
+        return jsonify({
+            'id': company.id,
+            'name': company.name,
+            'category': company.category,
+            'city': company.city,
+            'address': company.address,
+            'phone': company.phone,
+            'website': company.website,
+            'description': company.description,
+            'logo': company.logo,
+            'rating': company.rating,
+            'review_count': company.review_count,
+            'owner': {
+                'id': company.owner.id,
+                'name': company.owner.name
+            } if company.owner else None,
+            'reviews': [review.to_dict() for review in reviews],
+            'created_at': company.created_at.isoformat()
+        })
+    except Exception as e:
+        return jsonify({'error': f'Ошибка загрузки компании: {str(e)}'}), 500
 
 @catalog_bp.route('/', methods=['POST'])
 @jwt_required()

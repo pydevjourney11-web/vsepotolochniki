@@ -278,6 +278,31 @@ class API {
         return this.request(`/moderation/${type}`);
     }
 
+    // Удаление контента (только для админов)
+    async deleteArticle(articleId) {
+        return this.request(`/moderation/articles/${articleId}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async deleteComment(commentId) {
+        return this.request(`/moderation/comments/${commentId}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async deleteReview(reviewId) {
+        return this.request(`/moderation/reviews/${reviewId}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async deleteCompany(companyId) {
+        return this.request(`/moderation/companies/${companyId}`, {
+            method: 'DELETE'
+        });
+    }
+
     // Загрузка файлов
     async uploadFile(file) {
         const formData = new FormData();

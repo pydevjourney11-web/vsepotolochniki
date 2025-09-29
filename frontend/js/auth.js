@@ -77,6 +77,11 @@ class AuthManager {
         return this.user && this.user.role === role;
     }
     
+    // Проверка, является ли пользователь администратором
+    isAdmin() {
+        return this.hasRole('admin');
+    }
+    
     // Установка роли (для тестирования)
     setRole(role) {
         if (this.user) {

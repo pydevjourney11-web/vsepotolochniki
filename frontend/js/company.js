@@ -35,6 +35,12 @@ function displayCompany(company) {
     document.getElementById('companyBreadcrumb').textContent = company.name;
     document.title = `${company.name} | ВП | Все потолочные`;
     
+    // Показываем кнопку удаления для админов
+    const adminActions = document.getElementById('adminActions');
+    if (adminActions && auth.isAdmin()) {
+        adminActions.style.display = 'block';
+    }
+    
     // Категория и город
     document.getElementById('companyCategory').textContent = company.category;
     document.getElementById('companyCity').textContent = company.city;
@@ -139,13 +145,20 @@ function displayReviews(reviews) {
                     <strong>${review.author.name}</strong>
                     <div class="rating">${formatRating(review.rating)}</div>
                 </div>
-                <small class="text-muted">${formatDate(review.created_at)}</small>
+                <div class="d-flex align-items-center gap-2">
+                    <small class="text-muted">${formatDate(review.created_at)}</small>
+                    ${auth.isAdmin() ? `
+                        <button class="btn btn-outline-danger btn-sm" onclick="deleteReviewFromCompany(${review.id})" title="Удалить отзыв">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    ` : ''}
+                </div>
             </div>
             <p class="mb-2">${review.text}</p>
             ${review.photos && review.photos.length > 0 ? `
                 <div class="review-photos">
                     ${review.photos.map(photo => `
-                        <img src="${photo}" class="review-photo" alt="Фото отзыва" onclick="openPhotoModal('${photo}')">
+                        <img src="/static/uploads/${photo}" class="review-photo" alt="Фото отзыва" onclick="openPhotoModal('/static/uploads/${photo}')">
                     `).join('')}
                 </div>
             ` : ''}
@@ -343,4 +356,38 @@ function showNotification(message, type = 'info') {
             alertDiv.remove();
         }
     }, 5000);
+}
+
+// Удаление компании со страницы (только для админов)
+async function deleteCompanyFromPage() {
+    if (!confirm('Вы уверены, что хотите удалить эту компанию? Это действие нельзя отменить.')) {
+        return;
+    }
+    
+    try {
+        await api.deleteCompany(currentCompany.id);
+        showNotification('Компания успешно удалена', 'success');
+        
+        // Перенаправляем на каталог через 2 секунды
+        setTimeout(() => {
+            window.location.href = 'catalog.html';
+        }, 2000);
+    } catch (error) {
+        handleError(error, 'удаления компании');
+    }
+}
+
+// Удаление отзыва со страницы компании (только для админов)
+async function deleteReviewFromCompany(reviewId) {
+    if (!confirm('Вы уверены, что хотите удалить этот отзыв? Это действие нельзя отменить.')) {
+        return;
+    }
+    
+    try {
+        await api.deleteReview(reviewId);
+        showNotification('Отзыв успешно удален', 'success');
+        loadCompany(); // Перезагружаем информацию о компании
+    } catch (error) {
+        handleError(error, 'удаления отзыва');
+    }
 }

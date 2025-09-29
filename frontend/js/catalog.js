@@ -177,6 +177,11 @@ function displayCompanies(companies) {
                                 <i class="fas fa-star"></i>
                             </button>
                         ` : ''}
+                        ${auth.isAdmin() ? `
+                            <button class="btn btn-outline-danger btn-sm" onclick="deleteCompanyFromCatalog(${company.id})" title="Удалить компанию">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        ` : ''}
                     </div>
                 </div>
             </div>
@@ -463,3 +468,18 @@ document.getElementById('reviewForm').addEventListener('submit', async function(
         handleError(error, 'добавления отзыва');
     }
 });
+
+// Удаление компании из каталога (только для админов)
+async function deleteCompanyFromCatalog(companyId) {
+    if (!confirm('Вы уверены, что хотите удалить эту компанию? Это действие нельзя отменить.')) {
+        return;
+    }
+    
+    try {
+        await api.deleteCompany(companyId);
+        showNotification('Компания успешно удалена', 'success');
+        loadCompanies(); // Перезагружаем список компаний
+    } catch (error) {
+        handleError(error, 'удаления компании');
+    }
+}
